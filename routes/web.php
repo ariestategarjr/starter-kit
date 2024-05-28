@@ -6,6 +6,8 @@ use App\Http\Controllers\Session\ErrorController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\UnitController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -62,6 +64,16 @@ Route::middleware('auth')->group(function () {
         Route::get('/edit/{id}', [CategoryController::class, 'edit'])->name('category.edit');
         Route::post('/update/{id}', [CategoryController::class, 'update'])->name('category.update');
         Route::get('/destroy/{id}', [CategoryController::class, 'destroy'])->name('category.destroy');
+    });
+
+    // Units
+    Route::prefix('unit')->group(function () {
+        Route::get('/list', [UnitController::class, 'index'])->name('units.index');
+        Route::get('/create', [UnitController::class, 'create'])->name('unit.create');
+        Route::post('/store', [UnitController::class, 'store'])->name('unit.store');
+        Route::get('/edit/{id}', [UnitController::class, 'edit'])->name('unit.edit');
+        Route::post('/update/{id}', [UnitController::class, 'update'])->name('unit.update');
+        Route::get('/destroy/{id}', [UnitController::class, 'destroy'])->name('unit.destroy');
     });
 });
 

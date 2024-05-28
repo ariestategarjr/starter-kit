@@ -94,7 +94,13 @@
 
                     <!--begin: Menu item--->
                     <div data-kt-menu-trigger="click"
-                        class="menu-item menu-accordion {{ Request::is('category/list') || Request::is('category/edit*') ? 'show' : '' }}">
+                        class="menu-item menu-accordion {{ 
+                        Request::is('category/list') || 
+                        Request::is('category/create') || 
+                        Request::is('category/edit*') || 
+                        Request::is('unit/list') ||
+                        Request::is('unit/create') ||
+                        Request::is('unit/edit*') ? 'show' : '' }}">
                         <!--begin:Menu link-->
                         <span class="menu-link">
                             <span class="menu-icon">
@@ -109,7 +115,7 @@
                             <!--begin:Menu item-->
                             <div class="menu-item">
                                 <!--begin:Menu link-->
-                                <a class="menu-link {{ Request::is('category/list') || Request::is('category/edit*') ? 'active' : '' }}"
+                                <a class="menu-link {{ Request::is('category/list') || Request::is('category/create') || Request::is('category/edit*') ? 'active' : '' }}"
                                     href="{{ route('categories.index') }}">
                                     <span class="menu-bullet">
                                         <span class="bullet bullet-dot"></span>
@@ -119,11 +125,15 @@
                                 <!--end:Menu link-->
                             </div>
                             <!--end:Menu item-->
+                        </div>
+                        <!--end:Menu sub-->
 
+                        <!--begin:Menu sub-->
+                        <div class="menu-sub menu-sub-accordion">
                             <!--begin:Menu item-->
-                            {{-- <div class="menu-item">
+                            <div class="menu-item">
                                 <!--begin:Menu link-->
-                                <a class="menu-link {{ Request::is('unit/list') || Request::is('unit/edit*') ? 'active' : '' }}"
+                                <a class="menu-link {{ Request::is('unit/list') || Request::is('unit/create') || Request::is('unit/edit*') ? 'active' : '' }}"
                                     href="{{ route('units.index') }}">
                                     <span class="menu-bullet">
                                         <span class="bullet bullet-dot"></span>
@@ -132,10 +142,11 @@
                                 </a>
                                 <!--end:Menu link-->
                             </div>
-                            <!--end:Menu item--> --}}
-                            
+                            <!--end:Menu item-->
                         </div>
                         <!--end:Menu sub-->
+                            
+
                     </div>
                     <!--end: Menu item--->
 
