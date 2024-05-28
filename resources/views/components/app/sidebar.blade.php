@@ -145,6 +145,24 @@
                             <!--end:Menu item-->
                         </div>
                         <!--end:Menu sub-->
+
+                        <!--begin:Menu sub-->
+                        <div class="menu-sub menu-sub-accordion">
+                            <!--begin:Menu item-->
+                            <div class="menu-item">
+                                <!--begin:Menu link-->
+                                <a class="menu-link {{ Request::is('product/list') || Request::is('product/create') || Request::is('product/edit*') ? 'active' : '' }}"
+                                    href="{{ route('products.index') }}">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span>
+                                    <span class="menu-title">Product</span>
+                                </a>
+                                <!--end:Menu link-->
+                            </div>
+                            <!--end:Menu item-->
+                        </div>
+                        <!--end:Menu sub-->
                             
 
                     </div>

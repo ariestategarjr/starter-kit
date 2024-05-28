@@ -24,6 +24,7 @@
                                 <tr class="fw-bold fs-6 text-gray-800 border-bottom-2 border-gray-200">
                                     <th>No</th>
                                     <th>Nama</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -99,8 +100,12 @@
     <!--end::Row-->
 @endsection
 
+@push('styles')
+    <link href="{{ asset('assets/plugins/custom/datatables/datatables.bundle.css') }}" rel="stylesheet" type="text/css" />
+@endpush
+
 @push('script')
-    {{-- <script src="{{ asset('assets/plugins/custom/datatables/datatables.bundle.js') }}"></script> --}}
+    <script src="{{ asset('assets/plugins/custom/datatables/datatables.bundle.js') }}"></script>
     <!--begin::Page Custom Javascript(used by this page)-->
     {{-- <script src="{{ asset('assets/js/custom/apps/user-management/users/list/add.js') }}"></script> --}}
     {{-- <script src="{{ asset('assets/js/widgets.bundle.js') }}"></script> --}}
@@ -164,36 +169,36 @@
             });
         }
 
-        // $(document).ready(function() {
-        //     const table = $("#user_table").DataTable({
-        //         "language": {
-        //             "lengthMenu": "Show _MENU_",
-        //         },
-        //         "dom": "<'row'" +
-        //             "<'col-sm-6 d-flex align-items-center justify-conten-start'l>" +
-        //             "<'col-sm-6 d-flex align-items-center justify-content-end'f>" +
-        //             ">" +
+        $(document).ready(function() {
+            const table = $("#user_table").DataTable({
+                "language": {
+                    "lengthMenu": "Show _MENU_",
+                },
+                "dom": "<'row'" +
+                    "<'col-sm-6 d-flex align-items-center justify-conten-start'l>" +
+                    "<'col-sm-6 d-flex align-items-center justify-content-end'f>" +
+                    ">" +
 
-        //             "<'table-responsive'tr>" +
+                    "<'table-responsive'tr>" +
 
-        //             "<'row'" +
-        //             "<'col-sm-12 col-md-5 d-flex align-items-center justify-content-center justify-content-md-start'i>" +
-        //             "<'col-sm-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-end'p>" +
-        //             ">"
-        //     });
+                    "<'row'" +
+                    "<'col-sm-12 col-md-5 d-flex align-items-center justify-content-center justify-content-md-start'i>" +
+                    "<'col-sm-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-end'p>" +
+                    ">"
+            });
 
-        //     // Event handler untuk inisialisasi kembali tombol aksi setelah setiap paginasi
-        //     table.on('draw.dt', function() {
-        //         // Inisialisasi kembali tombol aksi di sini
-        //         // Misalnya, Anda dapat memanggil fungsi inisialisasi tombol aksi di sini
-        //         initAksiButtons();
-        //     });
+            // Event handler untuk inisialisasi kembali tombol aksi setelah setiap paginasi
+            table.on('draw.dt', function() {
+                // Inisialisasi kembali tombol aksi di sini
+                // Misalnya, Anda dapat memanggil fungsi inisialisasi tombol aksi di sini
+                initAksiButtons();
+            });
 
-        //     // Fungsi untuk menginisialisasi tombol aksi
-        //     function initAksiButtons() {
-        //         // Tempatkan logika inisialisasi tombol aksi di sini
-        //         console.log('Inisialisasi ulang tombol aksi');
-        //     }
-        // });
+            // Fungsi untuk menginisialisasi tombol aksi
+            function initAksiButtons() {
+                // Tempatkan logika inisialisasi tombol aksi di sini
+                console.log('Inisialisasi ulang tombol aksi');
+            }
+        });
     </script>
 @endpush

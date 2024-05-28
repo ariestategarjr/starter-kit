@@ -25,12 +25,12 @@ class UnitController extends Controller
     {
         //validate form
         $request->validate([
-            'name'         => 'required',
+            'name' => 'required',
         ]);
 
         //create category
         Unit::create([
-            'name'         => $request->name,
+            'name' => $request->name,
         ]);
 
         //redirect to index
@@ -48,7 +48,7 @@ class UnitController extends Controller
     {
         //validate form
         $request->validate([
-            'name'         => 'required',
+            'name' => 'required',
         ]);
 
         $unit = Unit::findOrFail($id);

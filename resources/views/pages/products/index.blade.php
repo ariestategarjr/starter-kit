@@ -10,28 +10,40 @@
             <div class="card">
                 <div class="card-header">
                     <div class="card-title">
-                        <h1>Unit List</h1>
+                        <h1>Products List</h1>
                     </div>
                 </div>
                 <div class="card-body">
-                    <a href="{{ route('unit.create') }}" class="btn btn-light-primary mb-10">
+                    <a href="{{ route('product.create') }}" class="btn btn-light-primary mb-10">
                         <i class="la la-plus"></i>
-                        Add Unit
+                        Add Product
                     </a>
                     <div class="table-responsive text-nowrap">
                         <table class="table table-hover table-rounded table-striped border gy-7 gs-7" id="user_table">
                             <thead>
                                 <tr class="fw-bold fs-6 text-gray-800 border-bottom-2 border-gray-200">
                                     <th>No</th>
-                                    <th>Nama</th>
+                                    <th>Barcode</th>
+                                    <th>Name</th>
+                                    <th>Satuan</th>
+                                    <th>Kategori</th>
+                                    <th>Stok</th>
+                                    <th>Harga Beli</th>
+                                    <th>Harga Jual</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($units as $unit)
+                                @foreach ($products as $product)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $unit->name }}</td>
+                                        <td>{{ $product->barcode }}</td>
+                                        <td>{{ $product->name }}</td>
+                                        <td>{{ $product->unit_id }}</td>
+                                        <td>{{ $product->category_id }}</td>
+                                        <td>{{ $product->stock }}</td>
+                                        <td>{{ $product->purchase_price }}</td>
+                                        <td>{{ $product->selling_price }}</td>
                                         {{-- <td class="text-uppercase">
                                             @if ($user->role->name == 'superadmin')
                                                 <span class="badge badge-info rounded-pill">
@@ -100,13 +112,7 @@
     <!--end::Row-->
 @endsection
 
-@push('styles')
-    <link href="{{ asset('assets/plugins/custom/datatables/datatables.bundle.css') }}" rel="stylesheet" type="text/css" />
-@endpush
-
 @push('script')
-    <script src="{{ asset('assets/plugins/custom/datatables/datatables.bundle.js') }}"></script>
-
     <script>
         function handleDelete(name, url) {
             Swal.fire({
@@ -166,38 +172,6 @@
                 }
             });
         }
-
-         $(document).ready(function() {
-            const table = $("#user_table").DataTable({
-                "language": {
-                    "lengthMenu": "Show _MENU_",
-                },
-                "dom": "<'row'" +
-                    "<'col-sm-6 d-flex align-items-center justify-conten-start'l>" +
-                    "<'col-sm-6 d-flex align-items-center justify-content-end'f>" +
-                    ">" +
-
-                    "<'table-responsive'tr>" +
-
-                    "<'row'" +
-                    "<'col-sm-12 col-md-5 d-flex align-items-center justify-content-center justify-content-md-start'i>" +
-                    "<'col-sm-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-end'p>" +
-                    ">"
-            });
-
-            // Event handler untuk inisialisasi kembali tombol aksi setelah setiap paginasi
-            table.on('draw.dt', function() {
-                // Inisialisasi kembali tombol aksi di sini
-                // Misalnya, Anda dapat memanggil fungsi inisialisasi tombol aksi di sini
-                initAksiButtons();
-            });
-
-            // Fungsi untuk menginisialisasi tombol aksi
-            function initAksiButtons() {
-                // Tempatkan logika inisialisasi tombol aksi di sini
-                console.log('Inisialisasi ulang tombol aksi');
-            }
-        });
 
         // $(document).ready(function() {
         //     const table = $("#user_table").DataTable({

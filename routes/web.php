@@ -6,6 +6,7 @@ use App\Http\Controllers\Session\ErrorController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UnitController;
 
 
@@ -74,6 +75,16 @@ Route::middleware('auth')->group(function () {
         Route::get('/edit/{id}', [UnitController::class, 'edit'])->name('unit.edit');
         Route::post('/update/{id}', [UnitController::class, 'update'])->name('unit.update');
         Route::get('/destroy/{id}', [UnitController::class, 'destroy'])->name('unit.destroy');
+    });
+
+    // Products
+    Route::prefix('product')->group(function () {
+        Route::get('/list', [ProductController::class, 'index'])->name('products.index');
+        Route::get('/create', [ProductController::class, 'create'])->name('product.create');
+        Route::post('/store', [ProductController::class, 'store'])->name('product.store');
+        Route::get('/edit/{id}', [ProductController::class, 'edit'])->name('product.edit');
+        Route::post('/update/{id}', [ProductController::class], 'update')->name('product.update');
+        Route::get('/destroy/{id}', [ProductController::class], 'destroy')->name('product.destroy');
     });
 });
 
