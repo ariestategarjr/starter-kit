@@ -119,11 +119,12 @@
                                 <!--end:Menu link-->
                             </div>
                             <!--end:Menu item-->
+
                             <!--begin:Menu item-->
-                            <div class="menu-item">
+                            {{-- <div class="menu-item">
                                 <!--begin:Menu link-->
-                                <a class="menu-link {{ Request::is('category/list') || Request::is('category/edit*') ? 'active' : '' }}"
-                                    href="{{ route('categories.index') }}">
+                                <a class="menu-link {{ Request::is('unit/list') || Request::is('unit/edit*') ? 'active' : '' }}"
+                                    href="{{ route('units.index') }}">
                                     <span class="menu-bullet">
                                         <span class="bullet bullet-dot"></span>
                                     </span>
@@ -131,7 +132,8 @@
                                 </a>
                                 <!--end:Menu link-->
                             </div>
-                            <!--end:Menu item-->
+                            <!--end:Menu item--> --}}
+                            
                         </div>
                         <!--end:Menu sub-->
                     </div>

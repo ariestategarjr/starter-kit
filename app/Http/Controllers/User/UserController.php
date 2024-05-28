@@ -66,7 +66,7 @@ class UserController extends Controller
                 ]);
             }
             DB::commit();
-            return redirect(route('pages.users.index'))->with('success', 'Berhasil update user!');
+            return redirect(route('users.index'))->with('success', 'Berhasil update user!');
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->back()->with('error', $e->getMessage());
