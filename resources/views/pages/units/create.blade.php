@@ -39,6 +39,52 @@
             <!--end::Form-->
         </div>
         <!--end::Col-->
+        
     </div>
     <!--end::Row-->
 @endsection
+
+@push('script')
+    {{-- <script src="{{ asset('assets/js/custom/authentication/sign-up/general.js') }}"></script> --}}
+    <script>
+        const keySuccess = @json(session('success'));
+        const keyErrors = @json(session('errors'));
+        const keyError = @json(session('error'));
+        if (keySuccess) {
+            Swal.fire({
+                title: 'Berhasil',
+                text: keySuccess,
+                icon: "success",
+                buttonsStyling: false,
+                confirmButtonText: "Ok, got it!",
+                customClass: {
+                    confirmButton: "btn btn-success"
+                }
+            });
+        }
+        if (keyErrors) {
+            Swal.fire({
+                title: 'Gagal',
+                text: 'Gagal membuat user pastikan semua form sudah terisi!',
+                icon: "error",
+                buttonsStyling: false,
+                confirmButtonText: "Ok, got it!",
+                customClass: {
+                    confirmButton: "btn btn-danger"
+                }
+            });
+        }
+        if (keyError) {
+            Swal.fire({
+                title: 'Gagal',
+                text: keyError,
+                icon: "error",
+                buttonsStyling: false,
+                confirmButtonText: "Ok, got it!",
+                customClass: {
+                    confirmButton: "btn btn-danger"
+                }
+            });
+        }
+    </script>
+@endpush

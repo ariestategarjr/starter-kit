@@ -39,8 +39,8 @@
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $product->barcode }}</td>
                                         <td>{{ $product->name }}</td>
-                                        <td>{{ $product->unit_id }}</td>
-                                        <td>{{ $product->category_id }}</td>
+                                        <td>{{ $product->unit->name }}</td>
+                                        <td>{{ $product->category->name }}</td>
                                         <td>{{ $product->stock }}</td>
                                         <td>{{ $product->purchase_price }}</td>
                                         <td>{{ $product->selling_price }}</td>
@@ -83,7 +83,7 @@
                                                 data-kt-menu="true">
                                                 <!--begin::Menu item-->
                                                 <div class="menu-item px-3">
-                                                    <a href="{{ route('unit.edit', ['id' => $unit->id]) }}"
+                                                    <a href="{{ route('product.edit', ['id' => $product->id]) }}"
                                                         class="menu-link px-3">Edit</a>
                                                 </div>
                                                 <!--end::Menu item-->
@@ -91,7 +91,7 @@
                                                 <div class="menu-item px-3">
                                                     @csrf
                                                     <a href="javascript:;"
-                                                        onclick="handleDelete('{{ $unit->name }}','{{ route('unit.destroy', ['id' => $unit->id]) }}')"
+                                                        onclick="handleDelete('{{ $product->name }}','{{ route('product.destroy', ['id' => $product->id]) }}')"
                                                         class="menu-link px-3"
                                                         data-kt-users-table-filter="delete_row">Delete</a>
                                                 </div>

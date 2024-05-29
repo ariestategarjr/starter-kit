@@ -12,6 +12,7 @@ class CategoryController extends Controller
     public function index(): View
     {
         $categories = Category::latest()->paginate(10);
+
         return view('pages.categories.index', compact('categories'));
     }
 
@@ -34,7 +35,6 @@ class CategoryController extends Controller
 
         //redirect to index
         return redirect()->route('categories.index')->with(['success' => 'Data Berhasil Disimpan!']);
-        // return redirect(route('categories.index'))->with('success', 'Berhasil Tambah Kategori!');
     }
 
     public function edit(string $id): View

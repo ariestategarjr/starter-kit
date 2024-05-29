@@ -43,7 +43,7 @@
     <!--end::Row-->
 @endsection
 @push('script')
-    <script src="{{ asset('assets/js/custom/authentication/sign-up/general.js') }}"></script>
+    {{-- <script src="{{ asset('assets/js/custom/authentication/sign-up/general.js') }}"></script> --}}
     <script>
         const keySuccess = @json(session('success'));
         const keyErrors = @json(session('errors'));
