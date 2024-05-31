@@ -21,7 +21,7 @@
         }
         -->
         <div id="kt_app_sidebar_toggle"
-            class="app-sidebar-toggle btn btn-icon btn-shadow btn-sm btn-color-muted btn-active-color-primary h-30px w-30px position-absolute top-50 start-100 translate-middle rotate"
+            class="app-sidebar-toggle btn btn-icon btn-shadow btn-sm btn-color-muted btn-active-color-primary h-30px w-30px position-absolute top-50 start-100 translate-middle rotate active"
             data-kt-toggle="true" data-kt-toggle-state="active" data-kt-toggle-target="body"
             data-kt-toggle-name="app-sidebar-minimize">
             <i class="ki-duotone ki-black-left-line fs-3 rotate-180">
@@ -100,13 +100,16 @@
                         Request::is('category/edit*') || 
                         Request::is('unit/list') ||
                         Request::is('unit/create') ||
-                        Request::is('unit/edit*') ? 'show' : '' }}">
+                        Request::is('unit/edit*') || 
+                        Request::is('product/list') || 
+                        Request::is('product/create') || 
+                        Request::is('product/edit**') ? 'show' : '' }}">
                         <!--begin:Menu link-->
                         <span class="menu-link">
                             <span class="menu-icon">
                                 <i class="ki-outline ki-user fs-2"></i>
                             </span>
-                            <span class="menu-title">Products Management</span>
+                            <span class="menu-title">Products Manage</span>
                             <span class="menu-arrow"></span>
                         </span>
                         <!--end:Menu link-->
@@ -162,13 +165,122 @@
                             </div>
                             <!--end:Menu item-->
                         </div>
+                        <!--end:Menu sub-->                        
+                    </div>
+                    <!--end: Menu item--->
+
+                    <!--begin: Menu item--->
+                    <div data-kt-menu-trigger="click"
+                        class="menu-item menu-accordion {{ 
+                        Request::is('customer/list') || 
+                        Request::is('customer/create') || 
+                        Request::is('customer/edit*') ||
+                        Request::is('supplier/list') ||
+                        Request::is('supplier/create') ||
+                        Request::is('supplier/edit*') ? 'show' : '' }}">
+                        <!--begin:Menu link-->
+                        <span class="menu-link">
+                            <span class="menu-icon">
+                                <i class="ki-outline ki-user fs-2"></i>
+                            </span>
+                            <span class="menu-title">Uwongs Manage</span>
+                            <span class="menu-arrow"></span>
+                        </span>
+                        <!--end:Menu link-->
+                        <!--begin:Menu sub-->
+                        <div class="menu-sub menu-sub-accordion">
+                            <!--begin:Menu item-->
+                            <div class="menu-item">
+                                <!--begin:Menu link-->
+                                <a class="menu-link {{ Request::is('customer/list') || Request::is('customer/create') || Request::is('customer/edit*') ? 'active' : '' }}"
+                                    href="{{ route('customers.index') }}">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span>
+                                    <span class="menu-title">Pelanggan</span>
+                                </a>
+                                <!--end:Menu link-->
+                            </div>
+                            <!--end:Menu item-->
+                        </div>
                         <!--end:Menu sub-->
-                            
+                        <!--begin:Menu sub-->
+                        <div class="menu-sub menu-sub-accordion">
+                            <!--begin:Menu item-->
+                            <div class="menu-item">
+                                <!--begin:Menu link-->
+                                <a class="menu-link {{ Request::is('supplier/list') || Request::is('supplier/create') || Request::is('supplier/edit*') ? 'active' : '' }}"
+                                    href="{{ route('suppliers.index') }}">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span>
+                                    <span class="menu-title">Penyuplai</span>
+                                </a>
+                                <!--end:Menu link-->
+                            </div>
+                            <!--end:Menu item-->
+                        </div>
+                        <!--end:Menu sub-->
 
                     </div>
                     <!--end: Menu item--->
 
-                    
+                    <!--begin: Menu item--->
+                    <div data-kt-menu-trigger="click"
+                        class="menu-item menu-accordion {{ 
+                        Request::is('sale/list') || 
+                        Request::is('sale/create') || 
+                        Request::is('sale/edit*') || 
+                        Request::is('purchase/list') || 
+                        Request::is('purchase/create') ||
+                        Request::is('purchase/edit*') ? 'show' : '' }}">
+                        <!--begin:Menu link-->
+                        <span class="menu-link">
+                            <span class="menu-icon">
+                                <i class="ki-outline ki-user fs-2"></i>
+                            </span>
+                            <span class="menu-title">Transaction Manage</span>
+                            <span class="menu-arrow"></span>
+                        </span>
+                        <!--end:Menu link-->
+                        <!--begin:Menu sub-->
+                        <div class="menu-sub menu-sub-accordion">
+                            <!--begin:Menu item-->
+                            <div class="menu-item">
+                                <!--begin:Menu link-->
+                                <a class="menu-link {{ Request::is('sale/list') || Request::is('sale/create') || Request::is('sale/edit*') ? 'active' : '' }}"
+                                    href="{{ route('sales.index') }}">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span>
+                                    <span class="menu-title">Penjualan</span>
+                                </a>
+                                <!--end:Menu link-->
+                            </div>
+                            <!--end:Menu item-->
+                        </div>
+                        <!--end:Menu sub-->
+                        <!--begin:Menu sub-->
+                        <div class="menu-sub menu-sub-accordion">
+                            <!--begin:Menu item-->
+                            <div class="menu-item">
+                                <!--begin:Menu link-->
+                                <a class="menu-link {{ Request::is('purchase/list') || Request::is('purchase/create') || Request::is('purchase/edit*') ? 'active' : '' }}"
+                                    href="{{ route('purchases.index') }}">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span>
+                                    <span class="menu-title">Pembelian</span>
+                                </a>
+                                <!--end:Menu link-->
+                            </div>
+                            <!--end:Menu item-->
+                        </div>
+                        <!--end:Menu sub-->
+
+                    </div>
+                    <!--end: Menu item--->
+
 
                     <!--begin:Menu item-->
                     <div class="menu-item pt-5">
@@ -188,7 +300,7 @@
                             <span class="menu-icon">
                                 <i class="ki-outline ki-user fs-2"></i>
                             </span>
-                            <span class="menu-title">User Management</span>
+                            <span class="menu-title">User Manage</span>
                             <span class="menu-arrow"></span>
                         </span>
                         <!--end:Menu link-->

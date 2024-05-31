@@ -9,19 +9,19 @@ use Illuminate\View\View;
 
 class UnitController extends Controller
 {
-    public function index(): View
+    public function index()
     {
-        $units = Unit::latest()->paginate(10);
+        $units = Unit::all();
 
         return view('pages.units.index', compact('units'));
     }
 
-    public function create(): View
+    public function create()
     {
         return view('pages.units.create');
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request)
     {
         //validate form
         $request->validate([
@@ -59,7 +59,7 @@ class UnitController extends Controller
         return redirect()->route('units.index')->with(['success' => 'Data Berhasil Diubah!']);
     }
 
-    public function destroy($id): RedirectResponse
+    public function destroy($id)
     {
         $unit = Unit::findOrFail($id);
         $unit->delete();

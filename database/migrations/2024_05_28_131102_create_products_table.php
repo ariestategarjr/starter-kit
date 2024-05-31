@@ -18,8 +18,8 @@ return new class extends Migration
             $table->unsignedBigInteger('unit_id');
             $table->unsignedBigInteger('category_id');
             $table->double('stock');
-            $table->bigInteger('purchase_price');
-            $table->bigInteger('selling_price');
+            $table->double('purchase_price');
+            $table->double('selling_price');
             $table->timestamps();
 
             $table->foreign('unit_id')->references('id')->on('units')->onDelete('cascade');

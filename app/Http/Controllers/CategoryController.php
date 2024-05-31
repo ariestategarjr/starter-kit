@@ -5,23 +5,22 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
 
 class CategoryController extends Controller
 {
-    public function index(): View
+    public function index()
     {
-        $categories = Category::latest()->paginate(10);
+        $categories = Category::all();
 
         return view('pages.categories.index', compact('categories'));
     }
 
-    public function create(): View
+    public function create()
     {
         return view('pages.categories.create');
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request)
     {
         //validate form
         $request->validate([
@@ -37,13 +36,13 @@ class CategoryController extends Controller
         return redirect()->route('categories.index')->with(['success' => 'Data Berhasil Disimpan!']);
     }
 
-    public function edit(string $id): View
+    public function edit(string $id)
     {
         $category = Category::findOrFail($id);
         return view('pages.categories.edit', compact('category'));
     }
 
-    public function update(Request $request, $id): RedirectResponse
+    public function update(Request $request, $id)
     {
         //validate form
         $request->validate([
@@ -60,7 +59,7 @@ class CategoryController extends Controller
         return redirect()->route('categories.index')->with(['success' => 'Data Berhasil Diubah!']);
     }
 
-    public function destroy($id): RedirectResponse
+    public function destroy($id)
     {
         $category = Category::findOrFail($id);
 
