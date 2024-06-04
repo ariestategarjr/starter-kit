@@ -112,11 +112,13 @@ Route::middleware('auth')->group(function () {
     // Sale
     Route::prefix('sale')->group(function () {
         Route::get('/list', [SaleController::class, 'index'])->name('sales.index');
-        Route::get('/create', [SaleController::class, 'create'])->name('sale.create');
+        // Route::get('/create', [SaleController::class, 'create'])->name('sale.create');
         Route::post('/store', [SaleController::class, 'store'])->name('sale.store');
-        Route::get('/edit/{id}', [SaleController::class, 'edit'])->name('sale.edit');
-        Route::post('/update/{id}', [SaleController::class, 'update'])->name('sale.update');
-        Route::get('/destroy/{id}', [SaleController::class, 'destroy'])->name('sale.destroy');
+        // Route::get('/edit/{id}', [SaleController::class, 'edit'])->name('sale.edit');
+        // Route::post('/update/{id}', [SaleController::class, 'update'])->name('sale.update');
+        // Route::get('/destroy/{id}', [SaleController::class, 'destroy'])->name('sale.destroy');
+        Route::get('/showProductsModal', [SaleController::class, 'showProductsModal'])->name('sale.showProductsModal');
+        Route::get('/displayProductsData', [SaleController::class, 'displayProductsData'])->name('sale.displayProductsData');
     });
 
     // Purchase
