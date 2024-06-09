@@ -118,7 +118,8 @@ Route::middleware('auth')->group(function () {
         // Route::post('/update/{id}', [SaleController::class, 'update'])->name('sale.update');
         // Route::get('/destroy/{id}', [SaleController::class, 'destroy'])->name('sale.destroy');
         Route::get('/showProductsModal', [SaleController::class, 'showProductsModal'])->name('sale.showProductsModal');
-        Route::get('/displayProductsData', [SaleController::class, 'displayProductsData'])->name('sale.displayProductsData');
+        Route::post('/showProductsModalData', [SaleController::class, 'showProductsModalData'])->name('sale.showProductsModalData');
+        Route::post('/storeSaleDetailTemp', [SaleController::class, 'storeSaleDetailTemp'])->name('sale.storeSaleDetailTemp');
     });
 
     // Purchase

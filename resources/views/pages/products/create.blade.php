@@ -3,7 +3,7 @@
     IMM - Starter Kit
 @endsection
 @section('content')
-    <!--begin::Form-->    
+    <!--begin::Form-->
     <form class="form w-100" novalidate="novalidate" method="POST" action="{{ route('product.store') }}">
         @csrf
         <!--begin::Row-->
@@ -19,16 +19,17 @@
                                     <div class="col-xl-12">
                                         <label class="form-label fw-bolder text-dark fs-6 required">Barcode</label>
                                         <input class="form-control form-control-lg form-control-solid" type="text"
-                                            placeholder="Masukan barcode" name="barcode" id="barcode" readonly/>
-                                        </div>
+                                            placeholder="Masukan barcode" name="barcode" id="barcode" readonly />
+                                    </div>
                                     <div class="col-xl-12">
                                         <label class="form-label fw-bolder text-dark fs-6 required">Nama</label>
                                         <input class="form-control form-control-lg form-control-solid" type="text"
-                                            placeholder="Masukan nama" name="name" autocomplete="off"/>
+                                            placeholder="Masukan nama" name="name" autocomplete="off" />
                                     </div>
                                     <div class="fv-row mb-5">
                                         <label class="form-label fw-bolder text-dark fs-6 required">Unit</label>
-                                        <select name="unit" id="unit" class="form-select form-select-lg form-select-solid">
+                                        <select name="unit" id="unit"
+                                            class="form-select form-select-lg form-select-solid">
                                             <option value="" disabled selected>Pilih Unit</option>
                                             @foreach ($units as $unit)
                                                 <option value="{{ $unit->id }}">{{ $unit->name }}</option>
@@ -37,20 +38,21 @@
                                     </div>
                                     <div class="fv-row mb-5">
                                         <label class="form-label fw-bolder text-dark fs-6 required">Kategori</label>
-                                        <select name="category" id="category" class="form-select form-select-lg form-select-solid">
+                                        <select name="category" id="category"
+                                            class="form-select form-select-lg form-select-solid">
                                             <option value="" disabled selected>Pilih Kategori</option>
                                             @foreach ($categories as $category)
                                                 <option value="{{ $category->id }}">{{ $category->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
-                                </div>    
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>            
+                </div>
             </div>
-            
+
             <div class="col-md-6">
                 <div class="row g-5 gx-xl-10 mb-5 mb-xl-10">
                     <div class="col-md-12 col-lg-12 col-xl-12 col-xxl-3 mb-md-5 mb-xl-10">
@@ -60,18 +62,18 @@
                                 <div class="row fv-row mb-12">
                                     <div class="col-xl-12">
                                         <label class="form-label fw-bolder text-dark fs-6 required">Stok</label>
-                                        <input class="form-control form-control-lg form-control-solid" type="text"
-                                            placeholder="Masukan stok" name="stock" autocomplete="off"/>
-                                    </div>        
+                                        <input class="form-control form-control-lg form-control-solid" type="number"
+                                            placeholder="Masukan stok" name="stock" autocomplete="off" />
+                                    </div>
                                     <div class="col-xl-12">
                                         <label class="form-label fw-bolder text-dark fs-6 required">Harga Beli</label>
                                         <input class="form-control form-control-lg form-control-solid" type="text"
-                                            placeholder="Masukan harga beli" name="purchase_price" autocomplete="off"/>
+                                            placeholder="Masukan harga beli" name="purchase_price" autocomplete="off" />
                                     </div>
                                     <div class="col-xl-12">
                                         <label class="form-label fw-bolder text-dark fs-6 required">Harga Jual</label>
                                         <input class="form-control form-control-lg form-control-solid" type="text"
-                                            placeholder="Masukan harga jual" name="selling_price" autocomplete="off"/>
+                                            placeholder="Masukan harga jual" name="selling_price" autocomplete="off" />
                                     </div>
                                     <!--end::Col-->
                                 </div>
@@ -84,7 +86,7 @@
                                         <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span> --}}
                                     </button>
                                 </div>
-                            </div>                    
+                            </div>
                         </div>
                         <!--end::Actions-->
                     </div>
@@ -100,7 +102,7 @@
 @push('script')
     {{-- <script src="{{ asset('assets/js/custom/authentication/sign-up/general.js') }}"></script> --}}
     <script>
-        const barcode = Math.random().toString(8).substring(2,10); 
+        const barcode = Math.random().toString(8).substring(2, 10);
         // const barcode = document.getElementById('barcode').value;
         document.getElementById('barcode').value = barcode;
     </script>

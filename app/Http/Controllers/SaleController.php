@@ -2,50 +2,67 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Customer;
+use Illuminate\Support\Facades\DB;
+
 use App\Models\Product;
+use App\Models\Sale;
+
 use Illuminate\Http\Request;
 
 class SaleController extends Controller
 {
     public function index()
     {
-        $customers = Customer::all();
-        return view('pages.sales.index', compact('customers'));
+        // generate invoice code
+        $latestInvoice = Sale::latest()->first();
+        $newInvoiceNumber = $latestInvoice ? intval(substr($latestInvoice->invoice_code, -4)) + 1 : 1;
+        $invoice_code = 'INV' . date('Ymd') . sprintf('%04d', $newInvoiceNumber);
+
+        return view('pages.sales.index', compact('invoice_code'));
     }
 
-    public function store(Request $request)
-    {
-        // validate form
-        $request->validate([
-            'barcode' => 'required',
-            'name' => 'required',
-            'unit' => 'required',
-            'category' => 'required',
-            'stock' => 'required',
-            'purchase_price' => 'required',
-            'selling_price' => 'required',
-        ]);
-    }
-
+    // partials - detail
     public function showSaleDetailTable()
     {
     }
 
+    // modal - product
     public function showProductsModal()
     {
-        // $message = [
-        //     'modal' => view('pages.sales.modal.product')
-        // ];
-
-        // return response()->json($message);
         return response()->json(['modal' => true]);
     }
 
-    public function displayProductsData()
+    // modal - product data
+    public function showProductsModalData(Request $request)
     {
-        $products = Product::all();
+        $query = DB::table('products')->select('*')
+            ->leftJoin('categories', 'products.category_id', '=', 'categories.id')
+            ->leftJoin('units', 'products.unit_id', '=', 'units.id')
+            ->select('products.*', 'categories.name as category_name', 'units.name as unit_name');
 
-        return response()->json(['data' => $products]);
+        if ($request->has('search') && !empty($request->search)) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('products.name', 'like', '%' . $search . '%')
+                    ->orWhere('categories.name', 'like', '%' . $search . '%');
+            });
+        }
+
+        $totalData = $query->count();  // Total data sebelum paginasi
+        $totalFiltered = $totalData;   // Default filtered count
+
+        $start = $request->input('start', 0);
+        $length = $request->input('length', 10);
+
+        $query->offset($start)->limit($length);
+
+        $products = $query->get();
+
+        return response()->json([
+            'draw' => $request->input('draw'),
+            'recordsTotal' => $totalData,
+            'recordsFiltered' => $totalFiltered,
+            'data' => $products
+        ]);
     }
 }
