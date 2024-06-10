@@ -54,14 +54,6 @@
 
     <script>
         $(document).ready(function() {
-            dataTable();
-        });
-
-        function selectProduct() {
-
-        }
-
-        function dataTable() {
             var table = $("#user_table").DataTable({
                 "processing": true,
                 "serverSide": true,
@@ -105,13 +97,16 @@
                     {
                         "data": null,
                         "render": function(data, type, full, meta) {
-                            return "<input type='number' value='1' style='display: inline-block; width: 70px; max-width: 100%; height: 30px;' autofocus>";
+                            return `<input type='number' id='amount-${full.barcode}' value='1' style='display: inline-block; width: 70px; max-width: 100%; height: 30px;' autofocus>`;
                         }
                     },
                     {
                         "data": null,
                         "render": function(data, type, full, meta) {
-                            return "<button class='btn btn-sm btn-primary'>Pilih</button>";
+                            return `<button type='button' class='btn btn-sm btn-primary' onclick='selectProduct(
+                                    "${full.barcode}",
+                                    "${full.name}"
+                                    )'>Pilih</button>`;
                         }
                     }
                 ]
@@ -121,7 +116,7 @@
             $('input[type="search"]').on('keyup change', function() {
                 table.draw();
             });
-        }
+        });
     </script>
 @endpush
 

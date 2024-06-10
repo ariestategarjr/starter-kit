@@ -13,18 +13,18 @@ return new class extends Migration
     {
         Schema::create('sales', function (Blueprint $table) {
             $table->id();
-            $table->string('sale_invoice');
-            $table->date('sale_date');
-            $table->unsignedBigInteger('sale_customer_id');
-            $table->double('sale_discount_percent');
-            $table->double('sale_discount_cash');
-            $table->double('sale_total_gross');
-            $table->double('sale_total_net');
-            $table->double('sale_amount');
-            $table->double('sale_total');
+            $table->string('invoice');
+            $table->date('date');
+            $table->unsignedBigInteger('customer_id');
+            $table->double('discount_percent');
+            $table->double('discount_cash');
+            $table->double('total_gross');
+            $table->double('total_net');
+            $table->double('amount');
+            $table->double('total');
             $table->timestamps();
 
-            $table->foreign('sale_customer_id')->references('id')->on('customers')->onDelete('cascade');
+            $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
         });
     }
 

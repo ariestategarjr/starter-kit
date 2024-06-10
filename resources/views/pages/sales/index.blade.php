@@ -127,60 +127,124 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-xl-3" id="showSaleDetailTable">
-                            {{-- <div class="table-responsive text-nowrap">
-                                <table class="table table-hover table-rounded table-striped border gy-2 gs-2"
-                                    id="dataTable">
-                                    <thead>
-                                        <tr class="fw-bold fs-6 text-gray-800 border-bottom-2 border-gray-200">
-                                            <th>No</th>
-                                            <th>Nama</th>
-                                            <th>Aksi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-
-                                    </tbody>
-                                </table>
-                            </div> --}}
-
+                        <div class="table-responsive text-nowrap" id="showSaleDetailTable">
                             {{-- showSaleDetailTable will be display in here --}}
                         </div>
                     </div>
                 </div>
             </div>
+            <!--end::Col-->
         </div>
-        <!--end::Col-->
-    </div>
-    <!--end::Row-->
+        <!--end::Row-->
 
-    <!--begin::Modal-->
-    <div class="modal fade" id="productModal">
-        @include('pages.sales.modals.product')
-    </div>
-    <!--end::Modal-->
-@endsection
+        <!--begin::Modal-->
+        <div class="modal fade" id="productModal">
+            @include('pages.sales.modals.product')
+        </div>
+        <!--end::Modal-->
+    @endsection
 
-@push('script')
-    <script>
-        // function generateInvoiceCode() {
-        //     let invoiceCode = `FS${new Date().getTime()}`;
+    @push('script')
+        <script>
+            $(document).ready(function() {
+                $('#barcode').keydown(function(e) {
+                    if (e.keyCode === 13) {
+                        e.preventDefault();
+                        checkBarcodeInput();
+                    }
+                });
+                showSaleDetailTable();
 
-        //     $('#invoice').val(invoiceCode);
-        // }
+            });
 
-        function checkBarcodeInput() {
-            let barcode = $('#barcode').val();
+            function checkBarcodeInput() {
+                let barcode = $('#barcode').val();
 
-            if (barcode.length === 0) {
+                if (barcode.length === 0) {
+                    $.ajax({
+                        url: "{{ route('sale.showProductsModal') }}",
+                        type: "GET",
+                        dataType: "json",
+                        success: function(response) {
+                            if (response.modal) {
+                                $('#productModal').modal('show');
+                            }
+                        },
+                        error: function(xhr, thrownError) {
+                            alert(`${xhr.status} ${xhr.responseText} ${thrownError}`);
+                        }
+                    });
+                } else {
+                    $.ajax({
+                        url: "{{ route('sale.storeSaleDetailTemporary') }}",
+                        type: "POST",
+                        dataType: "json",
+                        data: {
+                            _token: "{{ csrf_token() }}",
+                            invoice_code: $('#invoice_code').val(),
+                            barcode: $('#barcode').val(),
+                            product_name: $('#product_name').val(),
+                            amount: $('#amount').val(),
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                showSaleDetailTable();
+                                reset();
+                            }
+                        },
+                        error: function(xhr, thrownError) {
+                            alert(`${xhr.status} ${xhr.responseText} ${thrownError}`);
+                        }
+                    });
+
+                }
+            }
+
+            function selectProduct(barcode, product_name) {
+                $('#barcode').val(barcode);
+                $('#product_name').val(product_name);
+                $('#amount').val(parseInt($(`#amount-${barcode}`).val()));
+
+                $('#productModal').on('hidden.bs.modal', function(e) {
+                    $('#barcode').focus();
+                });
+
+                $('#productModal').modal('hide');
+
+                // console.log(amount);
+                // let jumlah = $('#jumlah').val(numberItems);
+
+
+                // $('#kodebarcode').val(code);
+                // $('#namaproduk').val(name);
+                // // $('#jumlah').val(numberItems);
+
+                // $('#getModalProduct').on('hidden.bs.modal', function(event) {
+                //     $('#kodebarcode').focus();
+                //     checkCodeBarcode();
+                // });
+                // $('#getModalProduct').modal('hide');
+            }
+
+            // function storeSaleDetailTemporary() {
+
+            // }
+
+            function showSaleDetailTable() {
                 $.ajax({
-                    url: "{{ route('sale.showProductsModal') }}",
-                    type: "GET",
+                    url: "{{ route('sale.showSaleDetailTable') }}",
+                    type: "POST",
                     dataType: "json",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        invoice_code: $('#invoice_code').val(),
+                    },
+                    beforeSend: function() {
+                        $('#showSaleDetailTable').html('<i class="fa fa-spin fa-spinner"></i>');
+                    },
                     success: function(response) {
-                        if (response.modal) {
-                            // $('#modal-container').html(response.modal).show();
-                            $('#productModal').modal('show');
+                        if (response.data) {
+                            $('#showSaleDetailTable').html(response.data);
                         }
                     },
                     error: function(xhr, thrownError) {
@@ -188,54 +252,53 @@
                     }
                 });
             }
-            // else {
-            //     $.ajax({
-            //         url: "{{ route('sale.storeSaleDetailTemp') }}",
-            //         type: "POST",
-            //         dataType: "json",
-            //         data: {
-            //             _token: "{{ csrf_token() }}",
-            //             barcode: barcode,
-            //             invoice_code: $('#invoice_code').val(),
-            //             product_name: $('#product_name').val(),
-            //             amount: $('#amount').val(),
-            //         },
-            //         success: function(response) {
-            //             if (response.data === "many") {
-            //                 $.ajax({
-            //                     url: "{{ route('sale.showProductsModal') }}",
-            //                     type: "POST",
-            //                     dataType: "json",
-            //                     data: {
-            //                         _token: "{{ csrf_token() }}",
-            //                         keyword: barcode,
-            //                     },
-            //                     success: function(response) {
-            //                         if (response.modal) {
-            //                             $('#productModal').modal('show');
-            //                         }
-            //                     },
-            //                     error: function(xhr, thrownError) {
-            //                         alert(`${xhr.status} ${xhr.responseText} ${thrownError}`);
-            //                     }
-            //                 });
-            //             }
-            //             // if (response.success) {
-            //             // }
-            //         }
-            //     });
-            // }
-        }
 
-        $(document).ready(function() {
-            // generateInvoiceCode();
 
-            $('#barcode').keydown(function(e) {
-                if (e.keyCode === 13) {
-                    e.preventDefault();
-                    checkBarcodeInput();
-                }
-            });
-        });
-    </script>
-@endpush
+            function reset() {
+                $('#barcode').val('');
+                $('#product_name').val('');
+                $('#amount').val('1');
+                $('#barcode').focus();
+
+                // calculateTotalPay()
+            }
+        </script>
+    @endpush
+
+    {{-- // else { --}}
+    {{-- // $.ajax({
+    // url: "{{ route('sale.storeSaleDetailTemp') }}",
+    // type: "POST",
+    // dataType: "json",
+    // data: {
+    // _token: "{{ csrf_token() }}",
+    // barcode: barcode,
+    // invoice_code: $('#invoice_code').val(),
+    // product_name: $('#product_name').val(),
+    // amount: $('#amount').val(),
+    // },
+    // success: function(response) {
+    // if (response.data === "many") {
+    // $.ajax({
+    // url: "{{ route('sale.showProductsModal') }}",
+    // type: "POST",
+    // dataType: "json",
+    // data: {
+    // _token: "{{ csrf_token() }}",
+    // keyword: barcode,
+    // },
+    // success: function(response) {
+    // if (response.modal) {
+    // $('#productModal').modal('show');
+    // }
+    // },
+    // error: function(xhr, thrownError) {
+    // alert(`${xhr.status} ${xhr.responseText} ${thrownError}`);
+    // }
+    // });
+    // }
+    // // if (response.success) {
+    // // }
+    // }
+    // });
+    // } --}}

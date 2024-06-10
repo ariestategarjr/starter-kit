@@ -21,11 +21,6 @@ class SaleController extends Controller
         return view('pages.sales.index', compact('invoice_code'));
     }
 
-    // partials - detail
-    public function showSaleDetailTable()
-    {
-    }
-
     // modal - product
     public function showProductsModal()
     {
@@ -56,13 +51,99 @@ class SaleController extends Controller
 
         $query->offset($start)->limit($length);
 
-        $products = $query->get();
+        $result = $query->get();
 
         return response()->json([
             'draw' => $request->input('draw'),
             'recordsTotal' => $totalData,
             'recordsFiltered' => $totalFiltered,
-            'data' => $products
+            'data' => $result
         ]);
+    }
+
+    // partials - detail
+    public function showSaleDetailTable(Request $request)
+    {
+        $invoice_code = $request->input('invoice_code');
+
+        $query = DB::table('sales_detail_temporary')
+            ->join(
+                'products',
+                'sales_detail_temporary.barcode',
+                '=',
+                'products.barcode'
+            )
+            ->select(
+                'sales_detail_temporary.id as id',
+                'sales_detail_temporary.barcode as barcode',
+                'products.name',
+                'sales_detail_temporary.selling_price as selling_price',
+                'sales_detail_temporary.amount as amount',
+                'sales_detail_temporary.sub_total as sub_total'
+            )
+            ->where('sales_detail_temporary.invoice', $invoice_code)
+            ->orderBy('sales_detail_temporary.id', 'asc');
+
+        $result = $query->get();
+
+        return response()->json([
+            'data' => view('pages.sales.partials.detail', compact('result'))->render()
+        ]);
+    }
+
+
+    public function storeSaleDetailTemporary(Request $request)
+    {
+        $invoice_code = $request->invoice_code;
+        $barcode = $request->barcode;
+        $product_name = $request->product_name;
+        $amount = $request->amount;
+
+
+        if (strlen($product_name) > 0) {
+            $query = DB::table('products')
+                ->where('barcode', $barcode)
+                ->where('name', $product_name);
+        } else {
+            $query = DB::table('products')
+                ->where('barcode', 'like', '%' . $barcode . '%')
+                ->orWhere('name', 'like', '%' . $product_name . '%');
+        }
+        $result = $query->get()->count();
+
+        if ($result == 1) {
+            $row = $query->first();
+
+            if (intval($row->stock) == 0) {
+                $message = [
+                    'error' => 'Maaf, stok produk ini sudah habis.'
+                ];
+            } else if (intval($row->stock) < $amount) {
+                $message = [
+                    'error' => 'Maaf, stok tidak mencukupi.'
+                ];
+            } else {
+                $data = [
+                    'invoice' => $invoice_code,
+                    'barcode' => $barcode,
+                    'purchase_price' => $row->purchase_price,
+                    'selling_price' => $row->selling_price,
+                    'amount' => $amount,
+                    'sub_total' => floatval($row->selling_price) * $amount,
+                ];
+
+                DB::table('sales_detail_temporary')->insert($data);
+
+                $message = [
+                    'success' => 'Data berhasil disimpan.'
+                ];
+            }
+        } else {
+            $message = [
+                'error' => 'Data tidak ditemukan.'
+            ];
+        }
+
+        return response()->json($message);
     }
 }

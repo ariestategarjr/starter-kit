@@ -113,13 +113,14 @@ Route::middleware('auth')->group(function () {
     Route::prefix('sale')->group(function () {
         Route::get('/list', [SaleController::class, 'index'])->name('sales.index');
         // Route::get('/create', [SaleController::class, 'create'])->name('sale.create');
-        Route::post('/store', [SaleController::class, 'store'])->name('sale.store');
+        // Route::post('/store', [SaleController::class, 'store'])->name('sale.store');
         // Route::get('/edit/{id}', [SaleController::class, 'edit'])->name('sale.edit');
         // Route::post('/update/{id}', [SaleController::class, 'update'])->name('sale.update');
         // Route::get('/destroy/{id}', [SaleController::class, 'destroy'])->name('sale.destroy');
         Route::get('/showProductsModal', [SaleController::class, 'showProductsModal'])->name('sale.showProductsModal');
         Route::post('/showProductsModalData', [SaleController::class, 'showProductsModalData'])->name('sale.showProductsModalData');
-        Route::post('/storeSaleDetailTemp', [SaleController::class, 'storeSaleDetailTemp'])->name('sale.storeSaleDetailTemp');
+        Route::post('/showSaleDetailTable', [SaleController::class, 'showSaleDetailTable'])->name('sale.showSaleDetailTable');
+        Route::post('/storeSaleDetailTemporary', [SaleController::class, 'storeSaleDetailTemporary'])->name('sale.storeSaleDetailTemporary');
     });
 
     // Purchase
