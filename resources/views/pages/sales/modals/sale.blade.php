@@ -196,9 +196,7 @@
                                 title: 'Transaksi Berhasil!',
                                 text: "Anda berhasil melakukan transaksi.",
                                 icon: 'success',
-                                showCancelButton: true,
                                 confirmButtonColor: '#3085d6',
-                                cancelButtonColor: '#d33',
                             })
                             window.location.reload();
                         } else {
