@@ -13,7 +13,8 @@
 <body id="kt_app_body" data-kt-app-layout="light-sidebar" data-kt-app-header-fixed="true" data-kt-app-sidebar-enabled="true"
     data-kt-app-sidebar-fixed="true" data-kt-app-sidebar-hoverable="true" data-kt-app-sidebar-push-header="true"
     data-kt-app-sidebar-push-toolbar="true" data-kt-app-sidebar-push-footer="true" data-kt-app-toolbar-enabled="true"
-    class="app-default" data-kt-app-sidebar-minimize="{{ Request::is('sale/list') || Request::is('purchase/list') ? 'on' : '' }}">
+    class="app-default"
+    data-kt-app-sidebar-minimize="{{ Request::is('sale/list') || Request::is('purchase/list') ? 'on' : '' }}">
     <!--begin::Theme mode setup on page load-->
     <script>
         var defaultThemeMode = "light";
@@ -61,7 +62,8 @@
                         <div id="kt_app_content" class="app-content flex-column-fluid">
                             <!--begin::Content wrapper-->
                             <!--begin::Content container-->
-                            <div id="kt_app_content_container" class="{{ Route::is('sale/list') ? 'app-container' : '' }} container-fluid">
+                            <div id="kt_app_content_container"
+                                class="{{ Route::is('sale/list') ? 'app-container' : '' }} container-fluid">
                                 @yield('content')
                             </div>
                             <!--end::Content container-->

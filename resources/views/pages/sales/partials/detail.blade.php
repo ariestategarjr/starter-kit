@@ -21,8 +21,7 @@
                 <td>{{ $row->sub_total }}</td>
                 <td>
                     <button type="button" class="btn btn-sm btn-danger btn-danger-hide"
-                        onclick="
-                        deleteItem('{{ $row->id }}', '{{ $row->name }}')">
+                        onclick="deleteItem('{{ $row->id }}', '{{ $row->name }}')">
                         <i class="fas fa-trash-alt"></i>
                     </button>
                 </td>
@@ -30,3 +29,40 @@
         @endforeach
     </tbody>
 </table>
+
+
+<script>
+    function deleteItem(id, name) {
+        Swal.fire({
+            title: 'Apakah Anda yakin ingin',
+            html: `<h4 style="display: inline;"> menghapus <strong style="color: #d33;">${name}</strong> ?</h4>`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya',
+            cancelButtonText: 'Tidak'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: "{{ route('sale.deleteSaleDetailTemporaryItem') }}", // Menggunakan named route
+                    type: "POST",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        'id': id,
+                    },
+                    dataType: "json",
+                    success: function(response) {
+                        if (response.success) {
+                            showSaleDetailTable();
+                            reset();
+                        }
+                    },
+                    error: function(xhr, thrownError) {
+                        alert(`${xhr.status} ${xhr.responseText} ${thrownError}`);
+                    }
+                });
+            }
+        })
+    }
+</script>

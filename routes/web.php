@@ -119,8 +119,15 @@ Route::middleware('auth')->group(function () {
         // Route::get('/destroy/{id}', [SaleController::class, 'destroy'])->name('sale.destroy');
         Route::get('/showProductsModal', [SaleController::class, 'showProductsModal'])->name('sale.showProductsModal');
         Route::post('/showProductsModalData', [SaleController::class, 'showProductsModalData'])->name('sale.showProductsModalData');
+        Route::get('/showCustomersModal', [SaleController::class, 'showCustomersModal'])->name('sale.showCustomersModal');
+        Route::post('/showCustomersModalData', [SaleController::class, 'showCustomersModalData'])->name('sale.showCustomersModalData');
         Route::post('/showSaleDetailTable', [SaleController::class, 'showSaleDetailTable'])->name('sale.showSaleDetailTable');
         Route::post('/storeSaleDetailTemporary', [SaleController::class, 'storeSaleDetailTemporary'])->name('sale.storeSaleDetailTemporary');
+        Route::post('/deleteSaleDetailTemporaryItem', [SaleController::class, 'deleteSaleDetailTemporaryItem'])->name('sale.deleteSaleDetailTemporaryItem');
+        Route::post('/deleteSaleDetailTemporary', [SaleController::class, 'deleteSaleDetailTemporary'])->name('sale.deleteSaleDetailTemporary');
+        Route::post('/sumSubTotalToTotal', [SaleController::class, 'sumSubTotalToTotal'])->name('sale.sumSubTotalToTotal');
+        Route::post('/showSaleModal', [SaleController::class, 'showSaleModal'])->name('sale.showSaleModal');
+        Route::post('/storeSale', [SaleController::class, 'storeSale'])->name('sale.storeSale');
     });
 
     // Purchase

@@ -15,14 +15,16 @@ return new class extends Migration
             $table->id();
             $table->string('invoice');
             $table->date('date');
-            $table->unsignedBigInteger('customer_id');
+            $table->bigInteger('customer_id')->unsigned()->nullable();
             $table->double('discount_percent');
             $table->double('discount_cash');
             $table->double('total_gross');
             $table->double('total_net');
-            $table->double('amount');
-            $table->double('total');
+            $table->double('payment_money');
+            $table->double('change_money');
             $table->timestamps();
+
+            $table->index('invoice'); // Menambahkan index pada kolom invoice
 
             $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
         });

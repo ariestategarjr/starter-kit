@@ -53,6 +53,23 @@
     {{-- <script src="{{ asset('assets/js/widgets.bundle.js') }}"></script> --}}
 
     <script>
+        function selectProduct(barcode, product_name) {
+            $('#barcode').val(barcode);
+            $('#product_name').val(product_name);
+            $('#amount').val(parseInt($(`#amount${barcode}`).val()));
+
+            $('#productModal').on('hidden.bs.modal', function(e) {
+                $('#barcode').focus();
+                // checkBarcodeInput();
+            });
+
+            $('#productModal').modal('hide');
+
+            // Reset
+            $(`#amount${barcode}`).val('1');
+            // $(`#amount${barcode}`).focus();
+        }
+
         $(document).ready(function() {
             var table = $("#user_table").DataTable({
                 "processing": true,
@@ -97,7 +114,7 @@
                     {
                         "data": null,
                         "render": function(data, type, full, meta) {
-                            return `<input type='number' id='amount-${full.barcode}' value='1' style='display: inline-block; width: 70px; max-width: 100%; height: 30px;' autofocus>`;
+                            return `<input type='number' id='amount${full.barcode}' value=1 style='display: inline-block; width: 70px; max-width: 100%; height: 30px;' autofocus>`;
                         }
                     },
                     {

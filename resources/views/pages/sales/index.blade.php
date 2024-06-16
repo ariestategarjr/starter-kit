@@ -65,8 +65,8 @@
                                 {{-- <input class="form-control form-control-sm" type="text" name="sale_customer" autocomplete="off" value="" readonly> --}}
                                 <div class="input-group mb-3">
                                     <input class="form-control form-control-sm" type="text" name="customer"
-                                        autocomplete="off" value="-" readonly>
-                                    <input type="hidden" name="kopel" id="kopel" value="0">
+                                        id="customer" autocomplete="off" value="" readonly>
+                                    <input type="hidden" name="customer_id" id="customer_id" value="0">
                                     <div class="input-group-append">
                                         <button class="btn btn-sm btn-primary" type="button" id="showCustomerModal">
                                             <i class="fa fa-search"></i>
@@ -79,15 +79,11 @@
                             <div class="form-group">
                                 <label class="form-label fw-bold fs-6">Aksi</label>
                                 <div class="input-group">
-                                    <button class="btn btn-danger btn-sm" type="button" id="deleteSaleModal">
+                                    <button class="btn btn-danger btn-sm" type="button" id="deleteSale">
                                         <i class="fa fa-trash-alt"></i>
                                     </button>&nbsp;
-                                    <button class="btn btn-success btn-sm" type="button" id="saveSaleModal">
+                                    <button class="btn btn-success btn-sm" type="button" id="showSaleModal">
                                         <i class="fa fa-save"></i>
-                                    </button>&nbsp;
-                                    <button class="btn btn-primary btn-sm" type="button" id="reportSaleModal">
-                                        {{-- <i class="fa fa-note"></i> --}}
-                                        <span>Laporan</span>
                                     </button>&nbsp;
                                 </div>
                             </div>
@@ -113,7 +109,7 @@
                             <div class="form-group">
                                 <label class="form-label fw-bold fs-6">Jumlah</label>
                                 <input class="form-control form-control-sm" type="number" name="amount" id="amount"
-                                    value="0" autocomplete="off" value="" readonly>
+                                    value="1" autocomplete="off" readonly>
                             </div>
                         </div>
                         <div class="col-xl-3">
@@ -141,7 +137,14 @@
         <div class="modal fade" id="productModal">
             @include('pages.sales.modals.product')
         </div>
-        <!--end::Modal-->
+
+        <div class="modal fade" id="customerModal">
+            @include('pages.sales.modals.customer')
+        </div>
+
+        <div class="modal fade" id="saleModal">
+            @include('pages.sales.modals.sale')
+        </div>
     @endsection
 
     @push('script')
@@ -153,8 +156,21 @@
                         checkBarcodeInput();
                     }
                 });
-                showSaleDetailTable();
+                $('#showCustomerModal').click(function(e) {
+                    e.preventDefault();
+                    showCustomersModal();
+                });
+                $('#showSaleModal').click(function(e) {
+                    e.preventDefault();
+                    showSaleModal();
+                });
+                $('#deleteSale').click(function(e) {
+                    e.preventDefault();
+                    deleteSaleDetailTemporary();
+                });
 
+                showSaleDetailTable();
+                sumSubTotalToTotal();
             });
 
             function checkBarcodeInput() {
@@ -191,44 +207,43 @@
                                 showSaleDetailTable();
                                 reset();
                             }
+
+                            if (response.error) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Peringatan!',
+                                    html: response.error,
+                                });
+                                showSaleDetailTable();
+                                reset();
+                            }
                         },
                         error: function(xhr, thrownError) {
                             alert(`${xhr.status} ${xhr.responseText} ${thrownError}`);
                         }
                     });
-
                 }
             }
 
-            function selectProduct(barcode, product_name) {
-                $('#barcode').val(barcode);
-                $('#product_name').val(product_name);
-                $('#amount').val(parseInt($(`#amount-${barcode}`).val()));
-
-                $('#productModal').on('hidden.bs.modal', function(e) {
-                    $('#barcode').focus();
+            function sumSubTotalToTotal() {
+                $.ajax({
+                    url: "{{ route('sale.sumSubTotalToTotal') }}",
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        invoice_code: $('#invoice_code').val(),
+                    },
+                    success: function(response) {
+                        if (response.data) {
+                            $('#total').val(response.data);
+                        }
+                    },
+                    error: function(xhr, thrownError) {
+                        alert(`${xhr.status} ${xhr.responseText} ${thrownError}`);
+                    }
                 });
-
-                $('#productModal').modal('hide');
-
-                // console.log(amount);
-                // let jumlah = $('#jumlah').val(numberItems);
-
-
-                // $('#kodebarcode').val(code);
-                // $('#namaproduk').val(name);
-                // // $('#jumlah').val(numberItems);
-
-                // $('#getModalProduct').on('hidden.bs.modal', function(event) {
-                //     $('#kodebarcode').focus();
-                //     checkCodeBarcode();
-                // });
-                // $('#getModalProduct').modal('hide');
             }
-
-            // function storeSaleDetailTemporary() {
-
-            // }
 
             function showSaleDetailTable() {
                 $.ajax({
@@ -253,14 +268,94 @@
                 });
             }
 
+            function showCustomersModal() {
+                $.ajax({
+                    url: "{{ route('sale.showCustomersModal') }}",
+                    type: "GET",
+                    dataType: "json",
+                    success: function(response) {
+                        if (response.modal) {
+                            $('#customerModal').modal('show');
+                        }
+                    },
+                    error: function(xhr, thrownError) {
+                        alert(`${xhr.status} ${xhr.responseText} ${thrownError}`);
+                    }
+                });
+            }
+
+            function showSaleModal() {
+                $.ajax({
+                    url: "{{ route('sale.showSaleModal') }}",
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        invoice_code: $('#invoice_code').val(),
+                        date: $('#date').val(),
+                        customer: $('#customer_id').val(),
+                    },
+                    success: function(response) {
+                        if (response.data) {
+                            $('#saleModal').html(response.data).show();
+                            $('#saleModal').on('shown.bs.modal', function(event) {
+                                $('#payment_money').focus();
+                            });
+                            $('#saleModal').modal('show');
+                        }
+                        if (response.error) {
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Error',
+                                text: response.error,
+                            })
+                        }
+                    },
+                    error: function(xhr, thrownError) {
+                        alert(`${xhr.status} ${xhr.responseText} ${thrownError}`);
+                    }
+                });
+            }
+
+            function deleteSaleDetailTemporary() {
+                Swal.fire({
+                    title: 'Apakah Anda yakin ingin',
+                    html: `<h4 style="display: inline;">menghapus <strong style="color: #d33;">transaksi</strong> ?`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ya',
+                    cancelButtonText: 'Tidak'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: "{{ route('sale.deleteSaleDetailTemporary') }}",
+                            type: "POST",
+                            dataType: "json",
+                            data: {
+                                _token: "{{ csrf_token() }}",
+                                invoice_code: $('#invoice_code').val(),
+                            },
+                            success: function(response) {
+                                if (response.success) {
+                                    window.location.reload();
+                                }
+                            },
+                            error: function(xhr, thrownError) {
+                                alert(`${xhr.status} ${xhr.responseText} ${thrownError}`);
+                            }
+                        });
+                    }
+                });
+            }
 
             function reset() {
                 $('#barcode').val('');
                 $('#product_name').val('');
                 $('#amount').val('1');
                 $('#barcode').focus();
-
-                // calculateTotalPay()
+                sumSubTotalToTotal();
             }
         </script>
     @endpush
