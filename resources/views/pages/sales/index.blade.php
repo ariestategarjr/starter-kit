@@ -48,14 +48,14 @@
                         <div class="col-xl-3">
                             <div class="form-group">
                                 <label class="form-label fw-bold fs-6 required">Faktur</label>
-                                <input class="form-control form-control-sm" type="text" name="invoice_code"
-                                    autocomplete="off" value="{{ $invoice_code }}" id="invoice_code" readonly>
+                                <input class="form-control form-control-sm" type="text" autocomplete="off"
+                                    value="{{ $invoice_code }}" id="invoice_code" readonly>
                             </div>
                         </div>
                         <div class="col-xl-3">
                             <div class="form-group">
                                 <label class="form-label fw-bold fs-6 required">Tanggal</label>
-                                <input class="form-control form-control-sm" type="text" name="date" autocomplete="off"
+                                <input class="form-control form-control-sm" type="text" autocomplete="off"
                                     value="{{ date('Y-m-d') }}" readonly>
                             </div>
                         </div>
@@ -64,9 +64,9 @@
                                 <label class="form-label fw-bold fs-6">Pelanggan</label>
                                 {{-- <input class="form-control form-control-sm" type="text" name="sale_customer" autocomplete="off" value="" readonly> --}}
                                 <div class="input-group mb-3">
-                                    <input class="form-control form-control-sm" type="text" name="customer"
-                                        id="customer" autocomplete="off" value="" readonly>
-                                    <input type="hidden" name="customer_id" id="customer_id" value="0">
+                                    <input class="form-control form-control-sm" type="text" autocomplete="off"
+                                        value="-" readonly>
+                                    <input type="hidden" id="customer_id" value="0">
                                     <div class="input-group-append">
                                         <button class="btn btn-sm btn-primary" type="button" id="showCustomerModal">
                                             <i class="fa fa-search"></i>
@@ -206,6 +206,7 @@
                             if (response.success) {
                                 showSaleDetailTable();
                                 reset();
+                                reloadDataTable(); // Tambahkan ini
                             }
 
                             if (response.error) {
@@ -216,6 +217,7 @@
                                 });
                                 showSaleDetailTable();
                                 reset();
+                                reloadDataTable(); // Tambahkan ini
                             }
                         },
                         error: function(xhr, thrownError) {
@@ -292,7 +294,6 @@
                     data: {
                         _token: "{{ csrf_token() }}",
                         invoice_code: $('#invoice_code').val(),
-                        date: $('#date').val(),
                         customer: $('#customer_id').val(),
                     },
                     success: function(response) {

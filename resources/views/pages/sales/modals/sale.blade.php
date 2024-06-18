@@ -56,12 +56,8 @@
                 <button type="submit" class="btn btn-primary" id="save-button">Simpan</button>
             </div>
         </form>
-        {{-- <input id="test"> --}}
-        {{-- <button type="button" id="test">TEST</button> --}}
     </div>
 </div>
-
-{{-- <script src="{{ asset('assets/plugins/custom/datatables-jquery/jquery.dataTables.min.js') }}"></script> --}}
 
 <script>
     function calculateDiscount() {

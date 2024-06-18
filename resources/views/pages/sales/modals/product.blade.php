@@ -70,6 +70,10 @@
             // $(`#amount${barcode}`).focus();
         }
 
+        function reloadDataTable() {
+            $('#user_table').DataTable().ajax.reload();
+        }
+
         $(document).ready(function() {
             var table = $("#user_table").DataTable({
                 "processing": true,
@@ -133,6 +137,11 @@
             $('input[type="search"]').on('keyup change', function() {
                 table.draw();
             });
+
+            // // Reload DataTable setiap kali modal dibuka
+            // $('#productModal').on('shown.bs.modal', function() {
+            //     reloadDataTable();
+            // });
         });
     </script>
 @endpush

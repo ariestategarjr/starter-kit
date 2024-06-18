@@ -248,7 +248,6 @@ class SaleController extends Controller
     public function showSaleModal(Request $request)
     {
         $invoice_code = $request->invoice_code;
-        $date = $request->date;
         $customer = $request->customer;
 
         $total = DB::table('sales_detail_temporary')
@@ -328,7 +327,7 @@ class SaleController extends Controller
         DB::table('sales_detail_temporary')->truncate();
 
         $message = [
-            'success' => $customer,
+            'success' => gettype($customer),
         ];
         return response()->json($message);
     }

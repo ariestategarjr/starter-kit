@@ -56,6 +56,7 @@
                         if (response.success) {
                             showSaleDetailTable();
                             reset();
+                            reloadDataTable(); // Tambahkan ini
                         }
                     },
                     error: function(xhr, thrownError) {
