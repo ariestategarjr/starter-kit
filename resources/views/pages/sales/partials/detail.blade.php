@@ -56,7 +56,8 @@
                         if (response.success) {
                             showSaleDetailTable();
                             reset();
-                            reloadDataTable(); // Tambahkan ini
+                            // Reload DataTable untuk menangani perubahan nilai "stok" ketika terjadi pengurangan atau pembatalan
+                            reloadDataTable();
                         }
                     },
                     error: function(xhr, thrownError) {
