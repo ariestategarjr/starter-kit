@@ -1,3 +1,7 @@
+{{-- @dd($product->unit->name)
+@dd($product->category->name) --}}
+{{-- @dd($units[0]->name) --}}
+
 @extends('layouts.app.main')
 @section('title')
     IMM - Starter Kit
@@ -11,7 +15,8 @@
             placeholder="Masukan nama" name="name" value="{{ $product->name }}" autocomplete="off"/>
         <button type="submit" class="btn btn-lg btn-primary">
     </form>     --}}
-    <form class="form w-100" novalidate="novalidate" method="POST" action="{{ route('product.update', [ 'id'=>$product->id ]) }}">
+    <form class="form w-100" novalidate="novalidate" method="POST"
+        action="{{ route('product.update', ['id' => $product->id]) }}">
         @csrf
         <!--begin::Row-->
         <div class="row g-5 gx-xl-10 mb-5 mb-xl-10">
@@ -26,42 +31,54 @@
                                     <div class="col-xl-12">
                                         <label class="form-label fw-bolder text-dark fs-6 required">Barcode</label>
                                         <input class="form-control form-control-lg form-control-solid" type="text"
-                                            placeholder="Masukan barcode" name="barcode" id="barcode" value="{{ $product->barcode }}" readonly/>
-                                        </div>
+                                            placeholder="Masukan barcode" name="barcode" id="barcode"
+                                            value="{{ $product->barcode }}" readonly />
+                                    </div>
                                     <div class="col-xl-12">
                                         <label class="form-label fw-bolder text-dark fs-6 required">Nama</label>
                                         <input class="form-control form-control-lg form-control-solid" type="text"
-                                            placeholder="Masukan nama" name="name" value="{{ $product->name }}" autocomplete="off"/>
+                                            placeholder="Masukan nama" name="name" value="{{ $product->name }}"
+                                            autocomplete="off" />
                                     </div>
                                     <div class="fv-row mb-5">
                                         <label class="form-label fw-bolder text-dark fs-6 required">Unit</label>
-                                        <select name="unit" id="unit" class="form-select form-select-lg form-select-solid">
-                                            <option value="" disabled selected>Pilih Unit</option>
+                                        <select name="unit" id="unit"
+                                            class="form-select form-select-lg form-select-solid">
+                                            <option value="" disabled>Pilih Unit</option>
+                                            <option value="{{ $product->unit->id }}" selected>{{ $product->unit->name }}
+                                            </option>
                                             @foreach ($units as $unit)
-                                                <option value="{{ $unit->id }}"
-                                                    {{ $unit->id == $unit->id ? 'selected' : '' }}>{{ $unit->name }}
-                                                </option>
+                                                @if ($unit->id != $product->unit->id)
+                                                    <option value="{{ $unit->id }}">{{ $unit->name }}
+                                                    </option>
+                                                @endif
                                             @endforeach
                                         </select>
                                     </div>
                                     <div class="fv-row mb-5">
                                         <label class="form-label fw-bolder text-dark fs-6 required">Kategori</label>
-                                        <select name="category" id="category" class="form-select form-select-lg form-select-solid">
+                                        <select name="category" id="category"
+                                            class="form-select form-select-lg form-select-solid">
                                             <option value="" disabled selected>Pilih Kategori</option>
+                                            <option value="{{ $product->category->id }}" selected>
+                                                {{ $product->category->name }}
+                                            </option>
                                             @foreach ($categories as $category)
-                                                <option value="{{ $category->id }}"
-                                                    {{ $category->id == $category->id ? 'selected' : '' }}>{{ $category->name }}
-                                                </option>
-                                            @endforeach                                        
+                                                @if ($category->id != $product->category->id)
+                                                    <option value="{{ $category->id }}">
+                                                        {{ $category->name }}
+                                                    </option>
+                                                @endif
+                                            @endforeach
                                         </select>
                                     </div>
-                                </div>    
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>            
+                </div>
             </div>
-            
+
             <div class="col-md-6">
                 <div class="row g-5 gx-xl-10 mb-5 mb-xl-10">
                     <div class="col-md-12 col-lg-12 col-xl-12 col-xxl-3 mb-md-5 mb-xl-10">
@@ -72,17 +89,20 @@
                                     <div class="col-xl-12">
                                         <label class="form-label fw-bolder text-dark fs-6 required">Stok</label>
                                         <input class="form-control form-control-lg form-control-solid" type="text"
-                                            placeholder="Masukan stok" name="stock" autocomplete="off" value="{{ $product->stock }}"/>
-                                    </div>        
+                                            placeholder="Masukan stok" name="stock" autocomplete="off"
+                                            value="{{ $product->stock }}" />
+                                    </div>
                                     <div class="col-xl-12">
                                         <label class="form-label fw-bolder text-dark fs-6 required">Harga Beli</label>
                                         <input class="form-control form-control-lg form-control-solid" type="text"
-                                            placeholder="Masukan harga beli" name="purchase_price" autocomplete="off" value="{{ $product->purchase_price }}"/>
+                                            placeholder="Masukan harga beli" name="purchase_price" autocomplete="off"
+                                            value="{{ $product->purchase_price }}" />
                                     </div>
                                     <div class="col-xl-12">
                                         <label class="form-label fw-bolder text-dark fs-6 required">Harga Jual</label>
                                         <input class="form-control form-control-lg form-control-solid" type="text"
-                                            placeholder="Masukan harga jual" name="selling_price" autocomplete="off" value="{{ $product->selling_price }}"/>
+                                            placeholder="Masukan harga jual" name="selling_price" autocomplete="off"
+                                            value="{{ $product->selling_price }}" />
                                     </div>
                                     <!--end::Col-->
                                 </div>
@@ -92,10 +112,10 @@
                                     <button type="submit" class="btn btn-lg btn-primary">
                                         <span class="indicator-label">Submit</span>
                                         {{-- <span class="indicator-progress">Please wait...
-                                        <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span> --}} 
+                                        <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span> --}}
                                     </button>
                                 </div>
-                            </div>                    
+                            </div>
                         </div>
                         <!--end::Actions-->
                     </div>

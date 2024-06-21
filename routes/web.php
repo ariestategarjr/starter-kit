@@ -11,7 +11,9 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\SaleController;
+use App\Http\Controllers\SaleReportController;
 use App\Http\Controllers\PurchaseController;
+use App\Http\Controllers\PurchaseReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -99,7 +101,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/destroy/{id}', [CustomerController::class, 'destroy'])->name('customer.destroy');
     });
 
-    // Supplier
+    // Suppliers
     Route::prefix('supplier')->group(function () {
         Route::get('/list', [SupplierController::class, 'index'])->name('suppliers.index');
         Route::get('/create', [SupplierController::class, 'create'])->name('suppliers.create');
@@ -130,6 +132,16 @@ Route::middleware('auth')->group(function () {
         Route::post('/storeSale', [SaleController::class, 'storeSale'])->name('sale.storeSale');
     });
 
+    // Sale Report
+    Route::prefix('sale_report')->group(function () {
+        Route::get('/list', [SaleReportController::class, 'index'])->name('sales_report.index');
+        // Route::get('/create', [SupplierController::class, 'create'])->name('suppliers.create');
+        // Route::post('/store', [SupplierController::class, 'store'])->name('supplier.store');
+        // Route::get('/edit/{id}', [SupplierController::class, 'edit'])->name('supplier.edit');
+        // Route::post('/update/{id}', [SupplierController::class, 'update'])->name('supplier.update');
+        // Route::get('/destroy/{id}', [SupplierController::class, 'destroy'])->name('supplier.destroy');
+    });
+
     // Purchase
     Route::prefix('purchase')->group(function () {
         Route::get('/list', [PurchaseController::class, 'index'])->name('purchases.index');
@@ -138,6 +150,16 @@ Route::middleware('auth')->group(function () {
         Route::get('/edit/{id}', [PurchaseController::class, 'edit'])->name('purchase.edit');
         Route::post('/update/{id}', [PurchaseController::class, 'update'])->name('purchase.update');
         Route::get('/destroy/{id}', [PurchaseController::class, 'destroy'])->name('purchase.destroy');
+    });
+
+    // Sale Report
+    Route::prefix('purchase_report')->group(function () {
+        Route::get('/list', [PurchaseReportController::class, 'index'])->name('purchases_report.index');
+        // Route::get('/create', [SupplierController::class, 'create'])->name('suppliers.create');
+        // Route::post('/store', [SupplierController::class, 'store'])->name('supplier.store');
+        // Route::get('/edit/{id}', [SupplierController::class, 'edit'])->name('supplier.edit');
+        // Route::post('/update/{id}', [SupplierController::class, 'update'])->name('supplier.update');
+        // Route::get('/destroy/{id}', [SupplierController::class, 'destroy'])->name('supplier.destroy');
     });
 });
 

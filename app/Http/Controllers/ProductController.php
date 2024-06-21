@@ -11,16 +11,16 @@ use Illuminate\Support\Facades\Redirect;
 
 class ProductController extends Controller
 {
-    function generateBarcode()
-    {
-        $timestamp = time();
-        $randomString = substr($timestamp, 0, 20);
-        return $randomString;
-    }
+    // function generateBarcode()
+    // {
+    //     $timestamp = time();
+    //     $randomString = substr($timestamp, 0, 20);
+    //     return $randomString;
+    // }
 
     public function index()
     {
-        $products = Product::with('category')->get();
+        // $products = Product::with('category')->get();
         $products = Product::all();
 
         return view('pages.products.index', compact('products'));
@@ -28,10 +28,10 @@ class ProductController extends Controller
 
     public function create()
     {
-        // $products = Product::with('category')->get();
+        // $products = Product::with(['category', 'unit'])->get();
         $categories = Category::all();
         $units = Unit::all();
-        return view('pages.products.create', compact('units', 'categories'));
+        return view('pages.products.create', compact('categories', 'units'));
     }
 
     public function store(Request $request)
@@ -63,10 +63,11 @@ class ProductController extends Controller
 
     public function edit(string $id)
     {
-        $product = Product::findOrFail($id);
+        $product = Product::with(['category', 'unit'])->findOrFail($id);
         $units = Unit::all();
         $categories = Category::all();
 
+        // dd($product->unit->name);
         return view('pages.products.edit', compact('product', 'units', 'categories'));
     }
 

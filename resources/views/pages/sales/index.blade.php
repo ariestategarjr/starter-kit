@@ -134,17 +134,18 @@
         <!--end::Row-->
 
         <!--begin::Modal-->
-        <div class="modal fade" id="productModal">
+        <div class="modal fade" tabindex="-1" id="productModal">
             @include('pages.sales.modals.product')
         </div>
 
-        <div class="modal fade" id="customerModal">
+        <div class="modal fade" tabindex="-1" id="customerModal">
             @include('pages.sales.modals.customer')
         </div>
 
-        <div class="modal fade" id="saleModal">
+        <div class="modal fade" tabindex="-1" id="saleModal" data-bs-backdrop="static">
             @include('pages.sales.modals.sale')
         </div>
+        <!--end::Modal-->
     @endsection
 
     @push('script')
@@ -168,6 +169,8 @@
                     e.preventDefault();
                     deleteSaleDetailTemporary();
                 });
+
+                $('#barcode').focus();
                 showSaleDetailTable();
                 sumSubTotalToTotal();
             });

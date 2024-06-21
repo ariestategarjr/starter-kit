@@ -14,10 +14,10 @@ class UnitSeeder extends Seeder
     public function run(): void
     {
         DB::table('units')->insert([
-            ['name' => 'Piece'],
+            ['name' => 'Buah'],
             ['name' => 'Kilogram'],
             ['name' => 'Liter'],
-            ['name' => 'Pack'],
+            ['name' => 'Pak'],
         ]);
     }
 }

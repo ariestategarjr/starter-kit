@@ -94,16 +94,17 @@
 
                     <!--begin: Menu item--->
                     <div data-kt-menu-trigger="click"
-                        class="menu-item menu-accordion {{ 
-                        Request::is('category/list') || 
-                        Request::is('category/create') || 
-                        Request::is('category/edit*') || 
+                        class="menu-item menu-accordion {{ Request::is('category/list') ||
+                        Request::is('category/create') ||
+                        Request::is('category/edit*') ||
                         Request::is('unit/list') ||
                         Request::is('unit/create') ||
-                        Request::is('unit/edit*') || 
-                        Request::is('product/list') || 
-                        Request::is('product/create') || 
-                        Request::is('product/edit**') ? 'show' : '' }}">
+                        Request::is('unit/edit*') ||
+                        Request::is('product/list') ||
+                        Request::is('product/create') ||
+                        Request::is('product/edit**')
+                            ? 'show'
+                            : '' }}">
                         <!--begin:Menu link-->
                         <span class="menu-link">
                             <span class="menu-icon">
@@ -165,19 +166,20 @@
                             </div>
                             <!--end:Menu item-->
                         </div>
-                        <!--end:Menu sub-->                        
+                        <!--end:Menu sub-->
                     </div>
                     <!--end: Menu item--->
 
                     <!--begin: Menu item--->
                     <div data-kt-menu-trigger="click"
-                        class="menu-item menu-accordion {{ 
-                        Request::is('customer/list') || 
-                        Request::is('customer/create') || 
+                        class="menu-item menu-accordion {{ Request::is('customer/list') ||
+                        Request::is('customer/create') ||
                         Request::is('customer/edit*') ||
                         Request::is('supplier/list') ||
                         Request::is('supplier/create') ||
-                        Request::is('supplier/edit*') ? 'show' : '' }}">
+                        Request::is('supplier/edit*')
+                            ? 'show'
+                            : '' }}">
                         <!--begin:Menu link-->
                         <span class="menu-link">
                             <span class="menu-icon">
@@ -227,19 +229,19 @@
 
                     <!--begin: Menu item--->
                     <div data-kt-menu-trigger="click"
-                        class="menu-item menu-accordion {{ 
-                        Request::is('sale/list') || 
-                        Request::is('sale/create') || 
-                        Request::is('sale/edit*') || 
-                        Request::is('purchase/list') || 
-                        Request::is('purchase/create') ||
-                        Request::is('purchase/edit*') ? 'show' : '' }}">
+                        class="menu-item menu-accordion 
+                        {{ Request::is('sale/list') ||
+                        Request::is('sale/create') ||
+                        Request::is('sale/edit*') ||
+                        Request::is('sale_report/list')
+                            ? 'show'
+                            : '' }}">
                         <!--begin:Menu link-->
                         <span class="menu-link">
                             <span class="menu-icon">
                                 <i class="ki-outline ki-user fs-2"></i>
                             </span>
-                            <span class="menu-title">Transaction Manage</span>
+                            <span class="menu-title">Sales Manage</span>
                             <span class="menu-arrow"></span>
                         </span>
                         <!--end:Menu link-->
@@ -265,12 +267,67 @@
                             <!--begin:Menu item-->
                             <div class="menu-item">
                                 <!--begin:Menu link-->
+                                <a class="menu-link {{ Request::is('sale_report/list') ? 'active' : '' }}"
+                                    href="{{ route('sales_report.index') }}">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span>
+                                    <span class="menu-title">Laporan Penjualan</span>
+                                </a>
+                                <!--end:Menu link-->
+                            </div>
+                            <!--end:Menu item-->
+                        </div>
+                        <!--end:Menu sub-->
+                    </div>
+                    <!--end: Menu item--->
+
+                    <!--begin: Menu item--->
+                    <div data-kt-menu-trigger="click"
+                        class="menu-item menu-accordion 
+                        {{ Request::is('purchase/list') ||
+                        Request::is('purchase/create') ||
+                        Request::is('purchase/edit*') ||
+                        Request::is('purchase_report/list')
+                            ? 'show'
+                            : '' }}">
+                        <!--begin:Menu link-->
+                        <span class="menu-link">
+                            <span class="menu-icon">
+                                <i class="ki-outline ki-user fs-2"></i>
+                            </span>
+                            <span class="menu-title">Purchases Manage</span>
+                            <span class="menu-arrow"></span>
+                        </span>
+                        <!--end:Menu link-->
+                        <!--begin:Menu sub-->
+                        <div class="menu-sub menu-sub-accordion">
+                            <!--begin:Menu item-->
+                            <div class="menu-item">
+                                <!--begin:Menu link-->
                                 <a class="menu-link {{ Request::is('purchase/list') || Request::is('purchase/create') || Request::is('purchase/edit*') ? 'active' : '' }}"
                                     href="{{ route('purchases.index') }}">
                                     <span class="menu-bullet">
                                         <span class="bullet bullet-dot"></span>
                                     </span>
                                     <span class="menu-title">Pembelian</span>
+                                </a>
+                                <!--end:Menu link-->
+                            </div>
+                            <!--end:Menu item-->
+                        </div>
+                        <!--end:Menu sub-->
+                        <!--begin:Menu sub-->
+                        <div class="menu-sub menu-sub-accordion">
+                            <!--begin:Menu item-->
+                            <div class="menu-item">
+                                <!--begin:Menu link-->
+                                <a class="menu-link {{ Request::is('purchase_report/list') ? 'active' : '' }}"
+                                    href="{{ route('purchases_report.index') }}">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span>
+                                    <span class="menu-title">Laporan Pembelian</span>
                                 </a>
                                 <!--end:Menu link-->
                             </div>
@@ -323,12 +380,12 @@
                         <!--end:Menu sub-->
                     </div>
                     <!--end: Menu item--->
-                    
 
 
 
-                    
-                    
+
+
+
                 </div>
                 <!--end::Menu-->
             </div>

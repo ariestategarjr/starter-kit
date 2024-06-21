@@ -215,6 +215,11 @@ class SaleController extends Controller
 
                 DB::table('sales_detail_temporary')->insert($data);
 
+                // Kurangi stok produk
+                DB::table('products')
+                    ->where('barcode', $barcode)
+                    ->decrement('stock', $amount);
+
                 $message = [
                     'success' => 'Data berhasil disimpan.'
                 ];
@@ -231,6 +236,14 @@ class SaleController extends Controller
     public function deleteSaleDetailTemporaryItem(Request $request)
     {
         $id = $request->id;
+
+        // Mengambil data item sebelum dihapus
+        $item = DB::table('sales_detail_temporary')->where('id', $id)->first();
+
+        // Kembalikan stok produk
+        DB::table('products')
+            ->where('barcode', $item->barcode)
+            ->increment('stock', $item->amount);
 
         // Menggunakan Query Builder untuk mencari dan mengambil data
         $query = DB::table('sales_detail_temporary')->where('id', $id)->delete();
@@ -250,6 +263,18 @@ class SaleController extends Controller
 
     public function deleteSaleDetailTemporary(Request $request)
     {
+        $invoice_code = $request->invoice_code;
+
+        // Mengambil semua rincian penjualan sementara untuk invoice tertentu
+        $items = DB::table('sales_detail_temporary')->where('invoice', $invoice_code)->get();
+
+        // Mengembalikan stok produk untuk setiap rincian penjualan sementara
+        foreach ($items as $item) {
+            DB::table('products')
+                ->where('barcode', $item->barcode)
+                ->increment('stock', $item->amount);
+        }
+
         // Delete all records from the 'temp_penjualan' table
         $query = DB::table('sales_detail_temporary')->delete();
 

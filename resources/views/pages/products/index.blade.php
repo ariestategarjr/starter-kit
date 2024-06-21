@@ -25,9 +25,9 @@
                                     <th>No</th>
                                     <th>Barcode</th>
                                     <th>Name</th>
+                                    <th>Stok</th>
                                     <th>Satuan</th>
                                     <th>Kategori</th>
-                                    <th>Stok</th>
                                     <th>Harga Beli</th>
                                     <th>Harga Jual</th>
                                     <th>Aksi</th>
@@ -39,9 +39,9 @@
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $product->barcode }}</td>
                                         <td>{{ $product->name }}</td>
-                                        <td>{{ $product->unit->name }}</td>
-                                        <td>{{ $product->category->name }}</td>
                                         <td>{{ $product->stock }}</td>
+                                        <td>{{ $product->unit->name ?? '-' }}</td>
+                                        <td>{{ $product->category->name ?? '-' }}</td>
                                         <td>{{ $product->purchase_price }}</td>
                                         <td>{{ $product->selling_price }}</td>
                                         {{-- <td class="text-uppercase">
