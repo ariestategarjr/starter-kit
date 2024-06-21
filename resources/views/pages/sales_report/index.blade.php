@@ -36,30 +36,42 @@
                             </div>
                         </div>
                     </form>
+                    <div class="col-sm-12 col-md-3">
+                        <div class="dt-buttons btn-group flex-wrap">
+                            <button onclick="printDiv('print-area')" class="btn btn-secondary buttons-print" tabindex="0"
+                                aria-controls="example1" type="button"><span>Cetak</span></button>
+                        </div>
+                        <!-- <div class="dt-buttons btn-group flex-wrap">
+                                                                                                                                            <button class="btn btn-danger" type="button" onclick="deleteFilter()"><span>Delete Data</span></button>
+                                                                                                                                        </div> -->
+                    </div>
+
                     <div class="table-responsive text-nowrap">
-                        <table class="table table-hover table-rounded table-striped border gy-7 gs-7" id="user_table">
-                            <thead>
-                                <tr class="fw-bold fs-6 text-gray-800 border-bottom-2 border-gray-200">
-                                    <th>No</th>
-                                    <th>No Faktur</th>
-                                    <th>Tanggal</th>
-                                    <th>Nama Produk</th>
-                                    <th>Harga Jual</th>
-                                    <th>Jumlah</th>
-                                    <th>Sub Total</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($sales as $sale)
-                                    <tr>
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $sale->invoice }}</td>
-                                        <td>{{ \Carbon\Carbon::parse($sale->date)->format('d-m-Y') }}</td>
-                                        <td>{{ $sale->name }}</td>
-                                        <td>{{ $sale->selling_price }}</td>
-                                        <td>{{ $sale->amount }}</td>
-                                        <td>{{ $sale->sub_total }}</td>
-                                        {{-- <td class="text-uppercase">
+                        {{-- <div class="col-sm-12" id="print-area"> --}}
+                        <div class="col-sm-12" id="print-area">
+                            <table class="table table-hover table-rounded table-striped border gy-7 gs-7" id="user_table">
+                                <thead>
+                                    <tr class="fw-bold fs-6 text-gray-800 border-bottom-2 border-gray-200">
+                                        <th>No</th>
+                                        <th>No Faktur</th>
+                                        <th>Tanggal</th>
+                                        <th>Nama Produk</th>
+                                        <th>Harga Jual</th>
+                                        <th>Jumlah</th>
+                                        <th>Sub Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($sales as $sale)
+                                        <tr>
+                                            <td>{{ $loop->iteration }}</td>
+                                            <td>{{ $sale->invoice }}</td>
+                                            <td>{{ \Carbon\Carbon::parse($sale->date)->format('d-m-Y') }}</td>
+                                            <td>{{ $sale->name }}</td>
+                                            <td>{{ $sale->selling_price }}</td>
+                                            <td>{{ $sale->amount }}</td>
+                                            <td>{{ $sale->sub_total }}</td>
+                                            {{-- <td class="text-uppercase">
                                         @if ($user->role->name == 'superadmin')
                                             <span class="badge badge-info rounded-pill">
                                                 {{ $user->role->name }}
@@ -79,7 +91,7 @@
                                         @endif
                                     </td>
                                     <td>{{ \Carbon\Carbon::parse($user->created_at)->isoFormat('DD MMM Y') }}</td> --}}
-                                        {{-- <td>
+                                            {{-- <td>
                                             <a href="#" class="btn btn-light btn-active-light-primary btn-sm"
                                                 data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">Actions
                                                 <!--begin::Svg Icon | path: icons/duotune/arrows/arr072.svg-->
@@ -114,10 +126,11 @@
                                             </div>
                                             <!--end::Menu-->
                                         </td> --}}
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -125,12 +138,50 @@
         <!--end::Col-->
     </div>
     <!--end::Row-->
+
+    <iframe id="printing-frame" name="print_frame" src="about:blank" style="display: none;"></iframe>
 @endsection
 @push('script')
     <script src="{{ asset('assets/plugins/custom/datatables-jquery/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('assets/plugins/custom/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('assets/plugins/custom/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
     <script src="{{ asset('assets/plugins/custom/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
+
+    <script>
+        function printDiv(elementId) {
+            // console.log(document.getElementById(elementId));
+            // let elementPrinted = document.getElementById(elementId);
+
+            // console.log(elementPrinted);
+
+            let elementPrinted = document.getElementById(elementId).innerHTML;
+
+            window.frames["print_frame"].document.title = document.title;
+            window.frames["print_frame"].document.body.innerHTML =
+                `<style>
+                .no-print { display: none }
+                table {
+                    border-collapse: collapse;
+                    width: 100%;
+                }
+                th, td {    
+                    border: 1px solid black;
+                    padding: 8px;
+                    text-align: left;
+                }
+                .dataTables_length,
+                .dataTables_filter,
+                .dataTables_info,
+                .dataTables_paginate 
+                {
+                    display: none;
+                }
+            </style>
+            ${elementPrinted}`;
+            window.frames["print_frame"].window.focus();
+            window.frames["print_frame"].window.print();
+        }
+    </script>
 
     <script>
         $(document).ready(function() {
