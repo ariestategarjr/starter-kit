@@ -42,8 +42,8 @@
                                 aria-controls="example1" type="button"><span>Cetak</span></button>
                         </div>
                         <!-- <div class="dt-buttons btn-group flex-wrap">
-                                                                                                                                            <button class="btn btn-danger" type="button" onclick="deleteFilter()"><span>Delete Data</span></button>
-                                                                                                                                        </div> -->
+                                                                                                                                                    <button class="btn btn-danger" type="button" onclick="deleteFilter()"><span>Delete Data</span></button>
+                                                                                                                                                </div> -->
                     </div>
 
                     <div class="table-responsive text-nowrap">
