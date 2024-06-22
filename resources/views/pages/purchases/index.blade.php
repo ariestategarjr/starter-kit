@@ -142,9 +142,9 @@
             @include('pages.purchases.modals.supplier')
         </div>
 
-        {{-- <div class="modal fade" tabindex="-1" id="purchaseModal" data-bs-backdrop="static">
+        <div class="modal fade" tabindex="-1" id="purchaseModal" data-bs-backdrop="static">
             @include('pages.purchases.modals.purchase')
-        </div> --}}
+        </div>
         <!--end::Modal-->
     </div>
     <!--end::Row-->
@@ -296,39 +296,40 @@
             });
         }
 
-        // function showSaleModal() {
-        //     $.ajax({
-        //         url: "{{ route('sale.showSaleModal') }}",
-        //         type: "POST",
-        //         dataType: "json",
-        //         data: {
-        //             _token: "{{ csrf_token() }}",
-        //             invoice_code: $('#invoice_code').val(),
-        //             customer: $('#customer_id').val(),
-        //         },
-        //         success: function(response) {
-        //             if (response.data) {
-        //                 $('#saleModal').html(response.data).show();
-        //                 $('#saleModal').on('shown.bs.modal', function(event) {
-        //                     $('#payment_money').focus();
-        //                 });
-        //                 $('#saleModal').modal('show');
-        //             }
-        //             if (response.error) {
-        //                 Swal.fire({
-        //                     icon: 'warning',
-        //                     title: 'Error',
-        //                     text: response.error,
-        //                 })
-        //             }
-        //         },
-        //         error: function(xhr, thrownError) {
-        //             alert(`${xhr.status} ${xhr.responseText} ${thrownError}`);
-        //         }
-        //     });
-        // }
+        function showPurchaseModal() {
+            $.ajax({
+                url: "{{ route('purchase.showPurchaseModal') }}",
+                type: "POST",
+                dataType: "json",
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    invoice_code: $('#invoice_code').val(),
+                    supplier: $('#supplier_id').val(),
+                },
+                success: function(response) {
+                    if (response.data) {
+                        console.log('TEST!');
+                        $('#purchaseModal').html(response.data).show();
+                        $('#purchaseModal').on('shown.bs.modal', function(event) {
+                            $('#payment_money').focus();
+                        });
+                        $('#purchaseModal').modal('show');
+                    }
+                    if (response.error) {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Error',
+                            text: response.error,
+                        })
+                    }
+                },
+                error: function(xhr, thrownError) {
+                    alert(`${xhr.status} ${xhr.responseText} ${thrownError}`);
+                }
+            });
+        }
 
-        function deleteSaleDetailTemporary() {
+        function deletePurchaseDetailTemporary() {
             Swal.fire({
                 title: 'Apakah Anda yakin ingin',
                 html: `<h4 style="display: inline;">menghapus <strong style="color: #d33;">transaksi</strong> ?`,
@@ -341,7 +342,7 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: "{{ route('sale.deleteSaleDetailTemporary') }}",
+                        url: "{{ route('purchase.deletePurchaseDetailTemporary') }}",
                         type: "POST",
                         dataType: "json",
                         data: {

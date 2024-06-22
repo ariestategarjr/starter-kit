@@ -163,14 +163,9 @@ class PurchaseController extends Controller
 
         $result = $query->get();
 
-        // dd($result);
-
         return response()->json([
             'data' => view('pages.purchases.partials.detail', compact('result'))->render()
         ]);
-        // return response()->json([
-        //     'data' => $result ? "OK Kueri AMMAN" : "!!!!"
-        // ]);
     }
 
     // purchase detail operations
@@ -214,36 +209,6 @@ class PurchaseController extends Controller
             $message = [
                 'success' => 'Data berhasil disimpan.'
             ];
-
-            // if (intval($row->stock) == 0) {
-            //     $message = [
-            //         'error' => 'Maaf, stok produk ini sudah habis.'
-            //     ];
-            // } else if (intval($row->stock) < $amount) {
-            //     $message = [
-            //         'error' => 'Maaf, stok tidak mencukupi.'
-            //     ];
-            // } else {
-            //     $data = [
-            //         'invoice' => $invoice_code,
-            //         'barcode' => $barcode,
-            //         'purchase_price' => $row->purchase_price,
-            //         'selling_price' => $row->selling_price,
-            //         'amount' => $amount,
-            //         'sub_total' => floatval($row->selling_price) * $amount,
-            //     ];
-
-            //     DB::table('purchases_detail_temporary')->insert($data);
-
-            //     // Kurangi stok produk
-            //     DB::table('products')
-            //         ->where('barcode', $barcode)
-            //         ->increment('stock', $amount);
-
-            //     $message = [
-            //         'success' => 'Data berhasil disimpan.'
-            //     ];
-            // }
         } else {
             $message = [
                 'error' => 'Data tidak ditemukan.'
@@ -278,6 +243,126 @@ class PurchaseController extends Controller
             'success' => $query,
         ];
 
+        return response()->json($message);
+    }
+
+    public function deletePurchaseDetailTemporary(Request $request)
+    {
+        $invoice_code = $request->invoice_code;
+
+        // Mengambil semua rincian penjualan sementara untuk invoice tertentu
+        $items = DB::table('purchases_detail_temporary')->where('invoice', $invoice_code)->get();
+
+        // Mengembalikan stok produk untuk setiap rincian penjualan sementara
+        foreach ($items as $item) {
+            DB::table('products')
+                ->where('barcode', $item->barcode)
+                ->decrement('stock', $item->amount);
+        }
+
+        // Delete all records from the 'temp_penjualan' table
+        $query = DB::table('purchases_detail_temporary')->delete();
+
+        // Prepare the response message
+        if ($query) {
+            $message = [
+                'success' => 'Transaksi berhasil dihapus.'
+            ];
+        } else {
+            $message = [
+                'error' => 'Gagal menghapus transaksi.'
+            ];
+        }
+
+        // Return the response as JSON
+        return response()->json($message);
+    }
+
+    // sale operations
+    public function showPurchaseModal(Request $request)
+    {
+        $invoice_code = $request->invoice_code;
+        $supplier = $request->supplier;
+
+        $total = DB::table('purchases_detail_temporary')
+            ->select(DB::raw('SUM(sub_total) as total'))
+            ->where('invoice', $invoice_code)
+            ->first();
+        $query = DB::table('purchases_detail_temporary')
+            ->where('invoice', $invoice_code);
+        if ($query->count() > 0) {
+            // Data yang akan dikirim ke modal
+            $data = [
+                'invoice_code' => $invoice_code,
+                'supplier' => $supplier,
+                'total' => $total->total,
+            ];
+            $view = view('pages.purchases.modals.purchase', $data)->render();
+            $message = [
+                'data' => $view
+            ];
+        } else {
+            $message = [
+                'error' => 'Transaksi belum ada.'
+            ];
+        }
+        return response()->json($message);
+    }
+
+    public function storePurchase(Request $request)
+    {
+        $invoice_code = $request->invoice_code;
+        $supplier = $request->supplier;
+        $total_gross = $request->total_gross;
+        $total_net = str_replace(',', '', $request->total_net); // , . 
+        $discount_percent = str_replace(',', '', $request->discount_percent); // .
+        $discount_cash = str_replace(',', '', $request->discount_cash); // .
+        $payment_money = str_replace(',', '', $request->payment_money); // . ,
+        $change_money = str_replace(',', '', $request->change_money); // . ,
+
+        // Jika nilai $customer bernilai 0 atau falsy, ubah menjadi NULL
+        $supplier = $supplier ? $supplier : NULL;
+
+        // Store Sale
+        $dataPurchases = [
+            'invoice' => $invoice_code,
+            'date' => date('Y-m-d H:i:s'),
+            'supplier_id' => $supplier,
+            'discount_percent' => $discount_percent,
+            'discount_cash' => $discount_cash,
+            'total_gross' => $total_gross,
+            'total_net' => $total_net,
+            'payment_money' => $payment_money,
+            'change_money' => $change_money,
+        ];
+        DB::table('purchases')->insert($dataPurchases);
+
+        // Store Sale Detail
+        $dataPurchaseDetailTemporary = DB::table('purchases_detail_temporary')
+            ->where('invoice', $invoice_code)
+            ->get();
+
+        $dataPurchasesDetail = [];
+        foreach ($dataPurchaseDetailTemporary as $row) {
+            $dataPurchasesDetail[] = [
+                'invoice' => $row->invoice,
+                'barcode' => $row->barcode,
+                'purchase_price' => $row->purchase_price,
+                'selling_price' => $row->selling_price,
+                'amount' => $row->amount,
+                'sub_total' => $row->sub_total,
+            ];
+        }
+
+        // Menyisipkan data ke tabel detail_sale secara batch
+        DB::table('purchases_detail')->insert($dataPurchasesDetail);
+
+        // Mengosongkan tabel temp_sale
+        DB::table('purchases_detail_temporary')->truncate();
+
+        $message = [
+            'success' => gettype($supplier),
+        ];
         return response()->json($message);
     }
 }
