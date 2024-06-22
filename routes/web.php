@@ -156,13 +156,13 @@ Route::middleware('auth')->group(function () {
         Route::post('/showProductsModalData', [PurchaseController::class, 'showProductsModalData'])->name('purchase.showProductsModalData');
         Route::get('/showSuppliersModal', [PurchaseController::class, 'showSuppliersModal'])->name('purchase.showSuppliersModal');
         Route::post('/showSuppliersModalData', [PurchaseController::class, 'showSuppliersModalData'])->name('purchase.showSuppliersModalData');
-        Route::post('/showSaleDetailTable', [PurchaseController::class, 'showPurchaseDetailTable'])->name('purchase.showPurchaseDetailTable');
-        Route::post('/storeSaleDetailTemporary', [PurchaseController::class, 'storePurchaseDetailTemporary'])->name('purchase.storePurchaseDetailTemporary');
-        Route::post('/deleteSaleDetailTemporaryItem', [PurchaseController::class, 'deletePurchaseDetailTemporaryItem'])->name('purchase.deletePurchaseDetailTemporaryItem');
-        Route::post('/deleteSaleDetailTemporary', [PurchaseController::class, 'deletePurchaseDetailTemporary'])->name('purchase.deletePurchaseDetailTemporary');
+        Route::post('/showPurchaseDetailTable', [PurchaseController::class, 'showPurchaseDetailTable'])->name('purchase.showPurchaseDetailTable');
+        Route::post('/storePurchaseDetailTemporary', [PurchaseController::class, 'storePurchaseDetailTemporary'])->name('purchase.storePurchaseDetailTemporary');
+        Route::post('/deletePurchaseDetailTemporaryItem', [PurchaseController::class, 'deletePurchaseDetailTemporaryItem'])->name('purchase.deletePurchaseDetailTemporaryItem');
+        Route::post('/deletePurchaseDetailTemporary', [PurchaseController::class, 'deletePurchaseDetailTemporary'])->name('purchase.deletePurchaseDetailTemporary');
         Route::post('/sumSubTotalToTotal', [PurchaseController::class, 'sumSubTotalToTotal'])->name('purchase.sumSubTotalToTotal');
         Route::post('/showPurchaseModal', [PurchaseController::class, 'showPurchaseModal'])->name('purchase.showPurchaseModal');
-        Route::post('/storePurchase', [PurchaseController::class, 'storeSale'])->name('purchase.storePurchase');
+        Route::post('/storePurchase', [PurchaseController::class, 'storePurchase'])->name('purchase.storePurchase');
     });
 
     // Purchase Report
