@@ -38,7 +38,7 @@ class CustomerController extends Controller
         return redirect()->route('customers.index')->with(['success' => 'Data Berhasil Disimpan!']);
     }
 
-    public function edit(string $id)
+    public function edit($id)
     {
         $customer = Customer::findOrFail($id);
 

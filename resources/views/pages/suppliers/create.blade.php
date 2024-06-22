@@ -8,8 +8,7 @@
         <!--begin::Col-->
         <div class="col-md-6">
             <!--begin::Form-->
-            <form class="form w-100" novalidate="novalidate" method="POST"
-                action="{{ route('customer.update', ['id' => $customer->id]) }}">
+            <form class="form w-100" novalidate="novalidate" method="POST" action="{{ route('supplier.store') }}">
                 @csrf
                 <!--begin::Input group-->
                 <div class="card">
@@ -18,25 +17,24 @@
                             <!--begin::Col-->
                             <div class="col-xl-12">
                                 <label class="form-label fw-bolder text-dark fs-6 required">Nama</label>
-                                <input type="text" name="name" id="name" class="form-control"
-                                    value="{{ $customer->name }}">
+                                <input class="form-control form-control-lg form-control-solid" type="text"
+                                    placeholder="Masukan nama" name="name" autocomplete="off" />
                             </div>
                             <!--end::Col-->
                             <!--begin::Col-->
                             <div class="col-xl-12">
                                 <label class="form-label fw-bolder text-dark fs-6 required">Alamat</label>
-                                <textarea class="form-control" name="address" rows="3">
-                                    {{ $customer->address }}
-                                </textarea>
+                                <textarea class="form-control" name="address" rows="3" placeholder="Masukkan alamat"></textarea>
                             </div>
                             <!--end::Col-->
                             <!--begin::Col-->
                             <div class="col-xl-12">
                                 <label class="form-label fw-bolder text-dark fs-6 required">Telepon</label>
-                                <input type="text" name="phone" id="phone" class="form-control"
-                                    value="{{ $customer->phone }}">
+                                <input class="form-control form-control-lg form-control-solid" type="text"
+                                    placeholder="Masukan telepon" name="phone" autocomplete="off" />
                             </div>
                             <!--end::Col-->
+
                         </div>
                         <!--end::Input group-->
 
@@ -58,8 +56,8 @@
     </div>
     <!--end::Row-->
 @endsection
+
 @push('script')
-    <script src="{{ asset('assets/js/custom/authentication/sign-up/general.js') }}"></script>
     <script>
         const keySuccess = @json(session('success'));
         const keyErrors = @json(session('errors'));

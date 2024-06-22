@@ -87,101 +87,100 @@
 @endpush
 
 @push('script')
-<script src="{{ asset('assets/plugins/custom/datatables/datatables.bundle.js') }}"></script>
-<!--begin::Page Custom Javascript(used by this page)-->
-{{-- <script src="{{ asset('assets/js/custom/apps/user-management/users/list/add.js') }}"></script> --}}
-{{-- <script src="{{ asset('assets/js/widgets.bundle.js') }}"></script> --}}
-<script>
-    function handleDelete(name, url) {
-        Swal.fire({
-            title: "Peringatan!",
-            html: `Yakin ingin hapus <strong>${name}</strong> ?`,
-            icon: "warning",
-            showCancelButton: true,
-            buttonsStyling: true,
-            cancelButtonText: 'Tidak jadi',
-            confirmButtonText: "Gass!",
-            customClass: {
-                cancelButton: 'btn btn-danger',
-                confirmButton: "btn btn-success",
-            }
-        }).then(function(result) {
-            if (result.isConfirmed) {
-                window.location.href = url;
-            } else if (result.dismiss == Swal.DismissReason.cancel) {
-                Swal.fire({
-                    title: "Tidak jadi!",
-                    text: 'Data kamu tidak jadi dihapus!',
-                    icon: 'error',
-                    buttonsStyling: true,
-                    confirmButtonText: 'Aman aja',
-                    customClass: {
-                        confirmButton: 'btn btn-success'
-                    }
-                })
-            }
-        })
-    }
-</script>
-<script>
-    const keySuccess = @json(session('success'));
-    const keyError = @json(session('error'));
-    if (keySuccess) {
-        Swal.fire({
-            title: "Sukses",
-            html: keySuccess,
-            icon: "success",
-            buttonsStyling: false,
-            confirmButtonText: "Siap Komandan!",
-            customClass: {
-                confirmButton: "btn btn-success"
-            }
-        });
-    }
-    if (keyError) {
-        Swal.fire({
-            title: "Gagal",
-            text: keyError,
-            icon: "error",
-            buttonsStyling: false,
-            confirmButtonText: "Siap Komandan!",
-            customClass: {
-                confirmButton: "btn btn-danger"
-            }
-        });
-    }
-
-    $(document).ready(function() {
-        const table = $("#user_table").DataTable({
-            "language": {
-                "lengthMenu": "Show _MENU_",
-            },
-            "dom": "<'row'" +
-                "<'col-sm-6 d-flex align-items-center justify-conten-start'l>" +
-                "<'col-sm-6 d-flex align-items-center justify-content-end'f>" +
-                ">" +
-
-                "<'table-responsive'tr>" +
-
-                "<'row'" +
-                "<'col-sm-12 col-md-5 d-flex align-items-center justify-content-center justify-content-md-start'i>" +
-                "<'col-sm-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-end'p>" +
-                ">"
-        });
-
-        // Event handler untuk inisialisasi kembali tombol aksi setelah setiap paginasi
-        table.on('draw.dt', function() {
-            // Inisialisasi kembali tombol aksi di sini
-            // Misalnya, Anda dapat memanggil fungsi inisialisasi tombol aksi di sini
-            initAksiButtons();
-        });
-
-        // Fungsi untuk menginisialisasi tombol aksi
-        function initAksiButtons() {
-            // Tempatkan logika inisialisasi tombol aksi di sini
-            console.log('Inisialisasi ulang tombol aksi');
+    <script src="{{ asset('assets/plugins/custom/datatables/datatables.bundle.js') }}"></script>
+    <!--begin::Page Custom Javascript(used by this page)-->
+    {{-- <script src="{{ asset('assets/js/custom/apps/user-management/users/list/add.js') }}"></script> --}}
+    {{-- <script src="{{ asset('assets/js/widgets.bundle.js') }}"></script> --}}
+    <script>
+        function handleDelete(name, url) {
+            Swal.fire({
+                title: "Peringatan!",
+                html: `Yakin ingin hapus <strong>${name}</strong> ?`,
+                icon: "warning",
+                showCancelButton: true,
+                buttonsStyling: true,
+                cancelButtonText: 'Tidak jadi',
+                confirmButtonText: "Gass!",
+                customClass: {
+                    cancelButton: 'btn btn-danger',
+                    confirmButton: "btn btn-success",
+                }
+            }).then(function(result) {
+                if (result.isConfirmed) {
+                    window.location.href = url;
+                } else if (result.dismiss == Swal.DismissReason.cancel) {
+                    Swal.fire({
+                        title: "Tidak jadi!",
+                        text: 'Data kamu tidak jadi dihapus!',
+                        icon: 'error',
+                        buttonsStyling: true,
+                        confirmButtonText: 'Aman aja',
+                        customClass: {
+                            confirmButton: 'btn btn-success'
+                        }
+                    })
+                }
+            })
         }
-    });
-</script>
+    </script>
+    <script>
+        const keySuccess = @json(session('success'));
+        const keyError = @json(session('error'));
+        if (keySuccess) {
+            Swal.fire({
+                title: "Sukses",
+                html: keySuccess,
+                icon: "success",
+                buttonsStyling: false,
+                confirmButtonText: "Siap Komandan!",
+                customClass: {
+                    confirmButton: "btn btn-success"
+                }
+            });
+        }
+        if (keyError) {
+            Swal.fire({
+                title: "Gagal",
+                text: keyError,
+                icon: "error",
+                buttonsStyling: false,
+                confirmButtonText: "Siap Komandan!",
+                customClass: {
+                    confirmButton: "btn btn-danger"
+                }
+            });
+        }
+
+        $(document).ready(function() {
+            const table = $("#user_table").DataTable({
+                "language": {
+                    "lengthMenu": "Show _MENU_",
+                },
+                "dom": "<'row'" +
+                    "<'col-sm-6 d-flex align-items-center justify-conten-start'l>" +
+                    "<'col-sm-6 d-flex align-items-center justify-content-end'f>" +
+                    ">" +
+
+                    "<'table-responsive'tr>" +
+
+                    "<'row'" +
+                    "<'col-sm-12 col-md-5 d-flex align-items-center justify-content-center justify-content-md-start'i>" +
+                    "<'col-sm-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-end'p>" +
+                    ">"
+            });
+
+            // Event handler untuk inisialisasi kembali tombol aksi setelah setiap paginasi
+            table.on('draw.dt', function() {
+                // Inisialisasi kembali tombol aksi di sini
+                // Misalnya, Anda dapat memanggil fungsi inisialisasi tombol aksi di sini
+                initAksiButtons();
+            });
+
+            // Fungsi untuk menginisialisasi tombol aksi
+            function initAksiButtons() {
+                // Tempatkan logika inisialisasi tombol aksi di sini
+                console.log('Inisialisasi ulang tombol aksi');
+            }
+        });
+    </script>
 @endpush
-    

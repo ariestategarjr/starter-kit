@@ -104,7 +104,7 @@ Route::middleware('auth')->group(function () {
     // Suppliers
     Route::prefix('supplier')->group(function () {
         Route::get('/list', [SupplierController::class, 'index'])->name('suppliers.index');
-        Route::get('/create', [SupplierController::class, 'create'])->name('suppliers.create');
+        Route::get('/create', [SupplierController::class, 'create'])->name('supplier.create');
         Route::post('/store', [SupplierController::class, 'store'])->name('supplier.store');
         Route::get('/edit/{id}', [SupplierController::class, 'edit'])->name('supplier.edit');
         Route::post('/update/{id}', [SupplierController::class, 'update'])->name('supplier.update');

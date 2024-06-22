@@ -9,7 +9,7 @@
         <div class="col-md-6">
             <!--begin::Form-->
             <form class="form w-100" novalidate="novalidate" method="POST"
-                action="{{ route('customer.update', ['id' => $customer->id]) }}">
+                action="{{ route('supplier.update', ['id' => $supplier->id]) }}">
                 @csrf
                 <!--begin::Input group-->
                 <div class="card">
@@ -19,14 +19,14 @@
                             <div class="col-xl-12">
                                 <label class="form-label fw-bolder text-dark fs-6 required">Nama</label>
                                 <input type="text" name="name" id="name" class="form-control"
-                                    value="{{ $customer->name }}">
+                                    value="{{ $supplier->name }}">
                             </div>
                             <!--end::Col-->
                             <!--begin::Col-->
                             <div class="col-xl-12">
                                 <label class="form-label fw-bolder text-dark fs-6 required">Alamat</label>
                                 <textarea class="form-control" name="address" rows="3">
-                                    {{ $customer->address }}
+                                    {{ $supplier->address }}
                                 </textarea>
                             </div>
                             <!--end::Col-->
@@ -34,7 +34,7 @@
                             <div class="col-xl-12">
                                 <label class="form-label fw-bolder text-dark fs-6 required">Telepon</label>
                                 <input type="text" name="phone" id="phone" class="form-control"
-                                    value="{{ $customer->phone }}">
+                                    value="{{ $supplier->phone }}">
                             </div>
                             <!--end::Col-->
                         </div>

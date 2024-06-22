@@ -34,16 +34,19 @@
                             <div class="col-auto">
                                 <button class="btn btn-primary" type="submit">Filter</button>
                             </div>
+                            <div class="col-auto">
+                                <button onclick="print('print-area')" class="btn btn-secondary"
+                                    type="button">Cetak</button>
+                            </div>
                         </div>
                     </form>
                     <div class="col-sm-12 col-md-3">
                         <div class="dt-buttons btn-group flex-wrap">
-                            <button onclick="printDiv('print-area')" class="btn btn-secondary buttons-print" tabindex="0"
-                                aria-controls="example1" type="button"><span>Cetak</span></button>
+
                         </div>
                         <!-- <div class="dt-buttons btn-group flex-wrap">
-                                                                                                                                                    <button class="btn btn-danger" type="button" onclick="deleteFilter()"><span>Delete Data</span></button>
-                                                                                                                                                </div> -->
+                                                                                                                                                                                                                                        <button class="btn btn-danger" type="button" onclick="deleteFilter()"><span>Delete Data</span></button>
+                                                                                                                                                                                                                                    </div> -->
                     </div>
 
                     <div class="table-responsive text-nowrap">
@@ -148,13 +151,13 @@
     <script src="{{ asset('assets/plugins/custom/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
 
     <script>
-        function printDiv(elementId) {
+        function print(element) {
             // console.log(document.getElementById(elementId));
             // let elementPrinted = document.getElementById(elementId);
 
             // console.log(elementPrinted);
 
-            let elementPrinted = document.getElementById(elementId).innerHTML;
+            let elementPrint = document.getElementById(element).innerHTML;
 
             window.frames["print_frame"].document.title = document.title;
             window.frames["print_frame"].document.body.innerHTML =
@@ -177,7 +180,7 @@
                     display: none;
                 }
             </style>
-            ${elementPrinted}`;
+            ${elementPrint}`;
             window.frames["print_frame"].window.focus();
             window.frames["print_frame"].window.print();
         }
