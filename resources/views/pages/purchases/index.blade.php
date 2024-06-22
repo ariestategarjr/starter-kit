@@ -134,9 +134,9 @@
         <!--end::Row-->
 
         <!--begin::Modal-->
-        {{-- <div class="modal fade" tabindex="-1" id="productModal">
+        <div class="modal fade" tabindex="-1" id="productModal">
             @include('pages.purchases.modals.product')
-        </div> --}}
+        </div>
 
         <div class="modal fade" tabindex="-1" id="supplierModal">
             @include('pages.purchases.modals.supplier')
