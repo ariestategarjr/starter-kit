@@ -48,8 +48,8 @@
                         <div class="col-xl-3">
                             <div class="form-group">
                                 <label class="form-label fw-bold fs-6 required">Faktur</label>
-                                <input class="form-control form-control-sm" type="text" autocomplete="off" value=""
-                                    id="invoice_code" readonly>
+                                <input class="form-control form-control-sm" type="text" autocomplete="off"
+                                    value="{{ $invoice_code }}" id="invoice_code" readonly>
                             </div>
                         </div>
                         <div class="col-xl-3">
