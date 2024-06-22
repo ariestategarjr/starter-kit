@@ -146,82 +146,207 @@
             @include('pages.sales.modals.sale')
         </div>
         <!--end::Modal-->
-    @endsection
+    </div>
+    <!--end::Row-->
+@endsection
 
-    @push('script')
-        <script>
-            $(document).ready(function() {
-                $('#barcode').keydown(function(e) {
-                    if (e.keyCode === 13) {
-                        e.preventDefault();
-                        checkBarcodeInput();
-                    }
-                });
-                $('#showCustomerModal').click(function(e) {
+@push('script')
+    <script>
+        $(document).ready(function() {
+            $('#barcode').keydown(function(e) {
+                if (e.keyCode === 13) {
                     e.preventDefault();
-                    showCustomersModal();
-                });
-                $('#showSaleModal').click(function(e) {
-                    e.preventDefault();
-                    showSaleModal();
-                });
-                $('#deleteSale').click(function(e) {
-                    e.preventDefault();
-                    deleteSaleDetailTemporary();
-                });
-
-                $('#barcode').focus();
-                showSaleDetailTable();
-                sumSubTotalToTotal();
+                    checkBarcodeInput();
+                }
+            });
+            $('#showCustomerModal').click(function(e) {
+                e.preventDefault();
+                showCustomersModal();
+            });
+            $('#showSaleModal').click(function(e) {
+                e.preventDefault();
+                showSaleModal();
+            });
+            $('#deleteSale').click(function(e) {
+                e.preventDefault();
+                deleteSaleDetailTemporary();
             });
 
-            function checkBarcodeInput() {
-                let barcode = $('#barcode').val();
+            $('#barcode').focus();
+            showSaleDetailTable();
+            sumSubTotalToTotal();
+        });
 
-                if (barcode.length === 0) {
-                    $.ajax({
-                        url: "{{ route('sale.showProductsModal') }}",
-                        type: "GET",
-                        dataType: "json",
-                        success: function(response) {
-                            if (response.modal) {
-                                $('#productModal').modal('show');
-                            }
-                        },
-                        error: function(xhr, thrownError) {
-                            alert(`${xhr.status} ${xhr.responseText} ${thrownError}`);
+        function checkBarcodeInput() {
+            let barcode = $('#barcode').val();
+
+            if (barcode.length === 0) {
+                $.ajax({
+                    url: "{{ route('sale.showProductsModal') }}",
+                    type: "GET",
+                    dataType: "json",
+                    success: function(response) {
+                        if (response.modal) {
+                            $('#productModal').modal('show');
                         }
-                    });
-                } else {
+                    },
+                    error: function(xhr, thrownError) {
+                        alert(`${xhr.status} ${xhr.responseText} ${thrownError}`);
+                    }
+                });
+            } else {
+                $.ajax({
+                    url: "{{ route('sale.storeSaleDetailTemporary') }}",
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        invoice_code: $('#invoice_code').val(),
+                        barcode: $('#barcode').val(),
+                        product_name: $('#product_name').val(),
+                        amount: $('#amount').val(),
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            showSaleDetailTable();
+                            reset();
+                            // Reload DataTable untuk menangani perubahan nilai "stok" ketika terjadi pengurangan atau pembatalan
+                            reloadDataTable();
+                        }
+
+                        if (response.error) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Peringatan!',
+                                html: response.error,
+                            });
+                            showSaleDetailTable();
+                            reset();
+                            // Reload DataTable untuk menangani perubahan nilai "stok" ketika terjadi pengurangan atau pembatalan
+                            reloadDataTable();
+                        }
+                    },
+                    error: function(xhr, thrownError) {
+                        alert(`${xhr.status} ${xhr.responseText} ${thrownError}`);
+                    }
+                });
+            }
+        }
+
+        function sumSubTotalToTotal() {
+            $.ajax({
+                url: "{{ route('sale.sumSubTotalToTotal') }}",
+                type: "POST",
+                dataType: "json",
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    invoice_code: $('#invoice_code').val(),
+                },
+                success: function(response) {
+                    if (response.data) {
+                        $('#total').val(response.data);
+                    }
+                },
+                error: function(xhr, thrownError) {
+                    alert(`${xhr.status} ${xhr.responseText} ${thrownError}`);
+                }
+            });
+        }
+
+        function showSaleDetailTable() {
+            $.ajax({
+                url: "{{ route('sale.showSaleDetailTable') }}",
+                type: "POST",
+                dataType: "json",
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    invoice_code: $('#invoice_code').val(),
+                },
+                beforeSend: function() {
+                    $('#showSaleDetailTable').html('<i class="fa fa-spin fa-spinner"></i>');
+                },
+                success: function(response) {
+                    if (response.data) {
+                        $('#showSaleDetailTable').html(response.data);
+                    }
+                },
+                error: function(xhr, thrownError) {
+                    alert(`${xhr.status} ${xhr.responseText} ${thrownError}`);
+                }
+            });
+        }
+
+        function showCustomersModal() {
+            $.ajax({
+                url: "{{ route('sale.showCustomersModal') }}",
+                type: "GET",
+                dataType: "json",
+                success: function(response) {
+                    if (response.modal) {
+                        $('#customerModal').modal('show');
+                    }
+                },
+                error: function(xhr, thrownError) {
+                    alert(`${xhr.status} ${xhr.responseText} ${thrownError}`);
+                }
+            });
+        }
+
+        function showSaleModal() {
+            $.ajax({
+                url: "{{ route('sale.showSaleModal') }}",
+                type: "POST",
+                dataType: "json",
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    invoice_code: $('#invoice_code').val(),
+                    customer: $('#customer_id').val(),
+                },
+                success: function(response) {
+                    if (response.data) {
+                        $('#saleModal').html(response.data).show();
+                        $('#saleModal').on('shown.bs.modal', function(event) {
+                            $('#payment_money').focus();
+                        });
+                        $('#saleModal').modal('show');
+                    }
+                    if (response.error) {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Error',
+                            text: response.error,
+                        })
+                    }
+                },
+                error: function(xhr, thrownError) {
+                    alert(`${xhr.status} ${xhr.responseText} ${thrownError}`);
+                }
+            });
+        }
+
+        function deleteSaleDetailTemporary() {
+            Swal.fire({
+                title: 'Apakah Anda yakin ingin',
+                html: `<h4 style="display: inline;">menghapus <strong style="color: #d33;">transaksi</strong> ?`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya',
+                cancelButtonText: 'Tidak'
+            }).then((result) => {
+                if (result.isConfirmed) {
                     $.ajax({
-                        url: "{{ route('sale.storeSaleDetailTemporary') }}",
+                        url: "{{ route('sale.deleteSaleDetailTemporary') }}",
                         type: "POST",
                         dataType: "json",
                         data: {
                             _token: "{{ csrf_token() }}",
                             invoice_code: $('#invoice_code').val(),
-                            barcode: $('#barcode').val(),
-                            product_name: $('#product_name').val(),
-                            amount: $('#amount').val(),
                         },
                         success: function(response) {
                             if (response.success) {
-                                showSaleDetailTable();
-                                reset();
-                                // Reload DataTable untuk menangani perubahan nilai "stok" ketika terjadi pengurangan atau pembatalan
-                                reloadDataTable();
-                            }
-
-                            if (response.error) {
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Peringatan!',
-                                    html: response.error,
-                                });
-                                showSaleDetailTable();
-                                reset();
-                                // Reload DataTable untuk menangani perubahan nilai "stok" ketika terjadi pengurangan atau pembatalan
-                                reloadDataTable();
+                                window.location.reload();
                             }
                         },
                         error: function(xhr, thrownError) {
@@ -229,144 +354,21 @@
                         }
                     });
                 }
-            }
+            });
+        }
 
-            function sumSubTotalToTotal() {
-                $.ajax({
-                    url: "{{ route('sale.sumSubTotalToTotal') }}",
-                    type: "POST",
-                    dataType: "json",
-                    data: {
-                        _token: "{{ csrf_token() }}",
-                        invoice_code: $('#invoice_code').val(),
-                    },
-                    success: function(response) {
-                        if (response.data) {
-                            $('#total').val(response.data);
-                        }
-                    },
-                    error: function(xhr, thrownError) {
-                        alert(`${xhr.status} ${xhr.responseText} ${thrownError}`);
-                    }
-                });
-            }
+        function reset() {
+            $('#barcode').val('');
+            $('#product_name').val('');
+            $('#amount').val('1');
+            $('#barcode').focus();
+            sumSubTotalToTotal();
+        }
+    </script>
+@endpush
 
-            function showSaleDetailTable() {
-                $.ajax({
-                    url: "{{ route('sale.showSaleDetailTable') }}",
-                    type: "POST",
-                    dataType: "json",
-                    data: {
-                        _token: "{{ csrf_token() }}",
-                        invoice_code: $('#invoice_code').val(),
-                    },
-                    beforeSend: function() {
-                        $('#showSaleDetailTable').html('<i class="fa fa-spin fa-spinner"></i>');
-                    },
-                    success: function(response) {
-                        if (response.data) {
-                            $('#showSaleDetailTable').html(response.data);
-                        }
-                    },
-                    error: function(xhr, thrownError) {
-                        alert(`${xhr.status} ${xhr.responseText} ${thrownError}`);
-                    }
-                });
-            }
-
-            function showCustomersModal() {
-                $.ajax({
-                    url: "{{ route('sale.showCustomersModal') }}",
-                    type: "GET",
-                    dataType: "json",
-                    success: function(response) {
-                        if (response.modal) {
-                            $('#customerModal').modal('show');
-                        }
-                    },
-                    error: function(xhr, thrownError) {
-                        alert(`${xhr.status} ${xhr.responseText} ${thrownError}`);
-                    }
-                });
-            }
-
-            function showSaleModal() {
-                $.ajax({
-                    url: "{{ route('sale.showSaleModal') }}",
-                    type: "POST",
-                    dataType: "json",
-                    data: {
-                        _token: "{{ csrf_token() }}",
-                        invoice_code: $('#invoice_code').val(),
-                        customer: $('#customer_id').val(),
-                    },
-                    success: function(response) {
-                        if (response.data) {
-                            $('#saleModal').html(response.data).show();
-                            $('#saleModal').on('shown.bs.modal', function(event) {
-                                $('#payment_money').focus();
-                            });
-                            $('#saleModal').modal('show');
-                        }
-                        if (response.error) {
-                            Swal.fire({
-                                icon: 'warning',
-                                title: 'Error',
-                                text: response.error,
-                            })
-                        }
-                    },
-                    error: function(xhr, thrownError) {
-                        alert(`${xhr.status} ${xhr.responseText} ${thrownError}`);
-                    }
-                });
-            }
-
-            function deleteSaleDetailTemporary() {
-                Swal.fire({
-                    title: 'Apakah Anda yakin ingin',
-                    html: `<h4 style="display: inline;">menghapus <strong style="color: #d33;">transaksi</strong> ?`,
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Ya',
-                    cancelButtonText: 'Tidak'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            url: "{{ route('sale.deleteSaleDetailTemporary') }}",
-                            type: "POST",
-                            dataType: "json",
-                            data: {
-                                _token: "{{ csrf_token() }}",
-                                invoice_code: $('#invoice_code').val(),
-                            },
-                            success: function(response) {
-                                if (response.success) {
-                                    window.location.reload();
-                                }
-                            },
-                            error: function(xhr, thrownError) {
-                                alert(`${xhr.status} ${xhr.responseText} ${thrownError}`);
-                            }
-                        });
-                    }
-                });
-            }
-
-            function reset() {
-                $('#barcode').val('');
-                $('#product_name').val('');
-                $('#amount').val('1');
-                $('#barcode').focus();
-                sumSubTotalToTotal();
-            }
-        </script>
-    @endpush
-
-    {{-- // else { --}}
-    {{-- // $.ajax({
+{{-- // else { --}}
+{{-- // $.ajax({
     // url: "{{ route('sale.storeSaleDetailTemp') }}",
     // type: "POST",
     // dataType: "json",
