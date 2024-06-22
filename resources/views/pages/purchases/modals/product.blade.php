@@ -71,6 +71,7 @@
         }
 
         function reloadDataTable() {
+            console.log("Reload Purchase Table");
             $('#user_table').DataTable().ajax.reload();
         }
 

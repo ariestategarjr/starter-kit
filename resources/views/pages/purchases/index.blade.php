@@ -175,7 +175,7 @@
 
             $('#barcode').focus();
             showPurchaseDetailTable();
-            // sumSubTotalToTotal();
+            sumSubTotalToTotal();
         });
 
         function checkBarcodeInput() {
@@ -234,25 +234,25 @@
             }
         }
 
-        // function sumSubTotalToTotal() {
-        //     $.ajax({
-        //         url: "{{ route('sale.sumSubTotalToTotal') }}",
-        //         type: "POST",
-        //         dataType: "json",
-        //         data: {
-        //             _token: "{{ csrf_token() }}",
-        //             invoice_code: $('#invoice_code').val(),
-        //         },
-        //         success: function(response) {
-        //             if (response.data) {
-        //                 $('#total').val(response.data);
-        //             }
-        //         },
-        //         error: function(xhr, thrownError) {
-        //             alert(`${xhr.status} ${xhr.responseText} ${thrownError}`);
-        //         }
-        //     });
-        // }
+        function sumSubTotalToTotal() {
+            $.ajax({
+                url: "{{ route('purchase.sumSubTotalToTotal') }}",
+                type: "POST",
+                dataType: "json",
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    invoice_code: $('#invoice_code').val(),
+                },
+                success: function(response) {
+                    if (response.data) {
+                        $('#total').val(response.data);
+                    }
+                },
+                error: function(xhr, thrownError) {
+                    alert(`${xhr.status} ${xhr.responseText} ${thrownError}`);
+                }
+            });
+        }
 
         function showPurchaseDetailTable() {
             $.ajax({
@@ -268,7 +268,7 @@
                 },
                 success: function(response) {
                     if (response.data) {
-                        console.log(response.data);
+                        // console.log(response.data);
                         $('#showPurchaseDetailTable').html(response.data);
                     }
                 },
@@ -328,38 +328,38 @@
         //     });
         // }
 
-        // function deleteSaleDetailTemporary() {
-        //     Swal.fire({
-        //         title: 'Apakah Anda yakin ingin',
-        //         html: `<h4 style="display: inline;">menghapus <strong style="color: #d33;">transaksi</strong> ?`,
-        //         icon: 'warning',
-        //         showCancelButton: true,
-        //         confirmButtonColor: '#3085d6',
-        //         cancelButtonColor: '#d33',
-        //         confirmButtonText: 'Ya',
-        //         cancelButtonText: 'Tidak'
-        //     }).then((result) => {
-        //         if (result.isConfirmed) {
-        //             $.ajax({
-        //                 url: "{{ route('sale.deleteSaleDetailTemporary') }}",
-        //                 type: "POST",
-        //                 dataType: "json",
-        //                 data: {
-        //                     _token: "{{ csrf_token() }}",
-        //                     invoice_code: $('#invoice_code').val(),
-        //                 },
-        //                 success: function(response) {
-        //                     if (response.success) {
-        //                         window.location.reload();
-        //                     }
-        //                 },
-        //                 error: function(xhr, thrownError) {
-        //                     alert(`${xhr.status} ${xhr.responseText} ${thrownError}`);
-        //                 }
-        //             });
-        //         }
-        //     });
-        // }
+        function deleteSaleDetailTemporary() {
+            Swal.fire({
+                title: 'Apakah Anda yakin ingin',
+                html: `<h4 style="display: inline;">menghapus <strong style="color: #d33;">transaksi</strong> ?`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya',
+                cancelButtonText: 'Tidak'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "{{ route('sale.deleteSaleDetailTemporary') }}",
+                        type: "POST",
+                        dataType: "json",
+                        data: {
+                            _token: "{{ csrf_token() }}",
+                            invoice_code: $('#invoice_code').val(),
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                window.location.reload();
+                            }
+                        },
+                        error: function(xhr, thrownError) {
+                            alert(`${xhr.status} ${xhr.responseText} ${thrownError}`);
+                        }
+                    });
+                }
+            });
+        }
 
         function reset() {
             $('#barcode').val('');

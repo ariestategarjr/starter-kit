@@ -33,7 +33,7 @@
 </table>
 
 
-{{-- <script>
+<script>
     function deleteItem(id, name) {
         Swal.fire({
             title: 'Apakah Anda yakin ingin',
@@ -47,7 +47,7 @@
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: "{{ route('sale.deleteSaleDetailTemporaryItem') }}", // Menggunakan named route
+                    url: "{{ route('purchase.deletePurchaseDetailTemporaryItem') }}", // Menggunakan named route
                     type: "POST",
                     data: {
                         _token: "{{ csrf_token() }}",
@@ -56,7 +56,7 @@
                     dataType: "json",
                     success: function(response) {
                         if (response.success) {
-                            showSaleDetailTable();
+                            showPurchaseDetailTable();
                             reset();
                             // Reload DataTable untuk menangani perubahan nilai "stok" ketika terjadi pengurangan atau pembatalan
                             reloadDataTable();
@@ -69,4 +69,4 @@
             }
         })
     }
-</script> --}}
+</script>

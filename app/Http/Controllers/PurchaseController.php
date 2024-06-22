@@ -40,6 +40,28 @@ class PurchaseController extends Controller
         return $invoice;
     }
 
+    public function sumSubTotalToTotal(Request $request)
+    {
+        // Ambil nilai fakturcode dari request
+        $invoice_code = $request->invoice_code;
+
+        // Query database untuk mendapatkan totalbayar
+        $result = DB::table('purchases_detail_temporary')
+            ->select(DB::raw('SUM(sub_total) as total'))
+            ->where('invoice', $invoice_code)
+            ->first();
+
+        // Format totalbayar
+        $total = number_format($result->total, 0, ",", ".");
+
+        // Buat response JSON
+        $message = [
+            'data' => $total
+        ];
+
+        return response()->json($message);
+    }
+
     // modal - product
     public function showProductsModal()
     {
@@ -173,40 +195,88 @@ class PurchaseController extends Controller
         if ($result == 1) {
             $row = $query->first();
 
-            if (intval($row->stock) == 0) {
-                $message = [
-                    'error' => 'Maaf, stok produk ini sudah habis.'
-                ];
-            } else if (intval($row->stock) < $amount) {
-                $message = [
-                    'error' => 'Maaf, stok tidak mencukupi.'
-                ];
-            } else {
-                $data = [
-                    'invoice' => $invoice_code,
-                    'barcode' => $barcode,
-                    'purchase_price' => $row->purchase_price,
-                    'selling_price' => $row->selling_price,
-                    'amount' => $amount,
-                    'sub_total' => floatval($row->selling_price) * $amount,
-                ];
+            $data = [
+                'invoice' => $invoice_code,
+                'barcode' => $barcode,
+                'purchase_price' => $row->purchase_price,
+                'selling_price' => $row->selling_price,
+                'amount' => $amount,
+                'sub_total' => floatval($row->selling_price) * $amount,
+            ];
 
-                DB::table('purchases_detail_temporary')->insert($data);
+            DB::table('purchases_detail_temporary')->insert($data);
 
-                // Kurangi stok produk
-                DB::table('products')
-                    ->where('barcode', $barcode)
-                    ->decrement('stock', $amount);
+            // Kurangi stok produk
+            DB::table('products')
+                ->where('barcode', $barcode)
+                ->increment('stock', $amount);
 
-                $message = [
-                    'success' => 'Data berhasil disimpan.'
-                ];
-            }
+            $message = [
+                'success' => 'Data berhasil disimpan.'
+            ];
+
+            // if (intval($row->stock) == 0) {
+            //     $message = [
+            //         'error' => 'Maaf, stok produk ini sudah habis.'
+            //     ];
+            // } else if (intval($row->stock) < $amount) {
+            //     $message = [
+            //         'error' => 'Maaf, stok tidak mencukupi.'
+            //     ];
+            // } else {
+            //     $data = [
+            //         'invoice' => $invoice_code,
+            //         'barcode' => $barcode,
+            //         'purchase_price' => $row->purchase_price,
+            //         'selling_price' => $row->selling_price,
+            //         'amount' => $amount,
+            //         'sub_total' => floatval($row->selling_price) * $amount,
+            //     ];
+
+            //     DB::table('purchases_detail_temporary')->insert($data);
+
+            //     // Kurangi stok produk
+            //     DB::table('products')
+            //         ->where('barcode', $barcode)
+            //         ->increment('stock', $amount);
+
+            //     $message = [
+            //         'success' => 'Data berhasil disimpan.'
+            //     ];
+            // }
         } else {
             $message = [
                 'error' => 'Data tidak ditemukan.'
             ];
         }
+
+        return response()->json($message);
+    }
+
+    public function deletePurchaseDetailTemporaryItem(Request $request)
+    {
+        $id = $request->id;
+
+        // Mengambil data item sebelum dihapus
+        $item = DB::table('purchases_detail_temporary')->where('id', $id)->first();
+
+        // Kembalikan stok produk
+        DB::table('products')
+            ->where('barcode', $item->barcode)
+            ->decrement('stock', $item->amount);
+
+        // Menggunakan Query Builder untuk mencari dan mengambil data
+        $query = DB::table('purchases_detail_temporary')->where('id', $id)->delete();
+
+        if ($query) {
+            return response()->json(['success' => true]);
+        } else {
+            return response()->json(['success' => false]);
+        }
+
+        $message = [
+            'success' => $query,
+        ];
 
         return response()->json($message);
     }
