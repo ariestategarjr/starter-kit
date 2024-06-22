@@ -65,7 +65,7 @@
                                 {{-- <input class="form-control form-control-sm" type="text" name="sale_customer" autocomplete="off" value="" readonly> --}}
                                 <div class="input-group mb-3">
                                     <input class="form-control form-control-sm" type="text" autocomplete="off"
-                                        value="-" readonly>
+                                        value="-" id="customer" readonly>
                                     <input type="hidden" id="customer_id" value="0">
                                     <div class="input-group-append">
                                         <button class="btn btn-sm btn-primary" type="button" id="showCustomerModal">

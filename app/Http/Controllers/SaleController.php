@@ -107,13 +107,13 @@ class SaleController extends Controller
         ]);
     }
 
-    // modal - customer
+    // modal - customer modal
     public function showCustomersModal()
     {
         return response()->json(['modal' => true]);
     }
 
-    // modal - product data
+    // modal - customer data
     public function showCustomersModalData(Request $request)
     {
         $query = DB::table('customers')->select('*');

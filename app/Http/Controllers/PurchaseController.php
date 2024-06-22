@@ -39,4 +39,46 @@ class PurchaseController extends Controller
         // Mengembalikan kode faktur
         return $invoice;
     }
+
+    // modal - product
+    public function showProductsModal()
+    {
+        return response()->json(['modal' => true]);
+    }
+
+    // modal - supplier modal
+    public function showSuppliersModal()
+    {
+        return response()->json(['modal' => true]);
+    }
+
+    // modal - supplier data
+    public function showSuppliersModalData(Request $request)
+    {
+        $query = DB::table('suppliers')->select('*');
+
+        if ($request->has('search') && !empty($request->search)) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('suppliers.name', 'like', '%' . $search . '%');
+            });
+        }
+
+        $totalData = $query->count();  // Total data sebelum paginasi
+        $totalFiltered = $totalData;   // Default filtered count
+
+        $start = $request->input('start', 0);
+        $length = $request->input('length', 10);
+
+        $query->offset($start)->limit($length);
+
+        $result = $query->get();
+
+        return response()->json([
+            'draw' => $request->input('draw'),
+            'recordsTotal' => $totalData,
+            'recordsFiltered' => $totalFiltered,
+            'data' => $result
+        ]);
+    }
 }

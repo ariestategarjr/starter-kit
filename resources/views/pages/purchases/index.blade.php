@@ -65,10 +65,10 @@
                                 {{-- <input class="form-control form-control-sm" type="text" name="sale_customer" autocomplete="off" value="" readonly> --}}
                                 <div class="input-group mb-3">
                                     <input class="form-control form-control-sm" type="text" autocomplete="off"
-                                        value="-" readonly>
-                                    <input type="hidden" id="customer_id" value="0">
+                                        id="supplier" value="-" readonly>
+                                    <input type="hidden" id="supplier_id" value="0">
                                     <div class="input-group-append">
-                                        <button class="btn btn-sm btn-primary" type="button" id="showCustomerModal">
+                                        <button class="btn btn-sm btn-primary" type="button" id="showSupplierModal">
                                             <i class="fa fa-search"></i>
                                         </button>
                                     </div>
@@ -134,18 +134,239 @@
         <!--end::Row-->
 
         <!--begin::Modal-->
-        <div class="modal fade" tabindex="-1" id="productModal">
-            @include('pages.sales.modals.product')
+        {{-- <div class="modal fade" tabindex="-1" id="productModal">
+            @include('pages.purchases.modals.product')
+        </div> --}}
+
+        <div class="modal fade" tabindex="-1" id="supplierModal">
+            @include('pages.purchases.modals.supplier')
         </div>
 
-        <div class="modal fade" tabindex="-1" id="customerModal">
-            @include('pages.sales.modals.customer')
-        </div>
-
-        <div class="modal fade" tabindex="-1" id="saleModal" data-bs-backdrop="static">
-            @include('pages.sales.modals.sale')
-        </div>
+        {{-- <div class="modal fade" tabindex="-1" id="purchaseModal" data-bs-backdrop="static">
+            @include('pages.purchases.modals.purchase')
+        </div> --}}
         <!--end::Modal-->
     </div>
     <!--end::Row-->
 @endsection
+
+@push('script')
+    <script>
+        $(document).ready(function() {
+            $('#barcode').keydown(function(e) {
+                if (e.keyCode === 13) {
+                    e.preventDefault();
+
+                    checkBarcodeInput();
+                }
+            });
+            $('#showSupplierModal').click(function(e) {
+                e.preventDefault();
+                // console.log('Test!');
+                showSuppliersModal();
+            });
+            $('#showSaleModal').click(function(e) {
+                e.preventDefault();
+                showSaleModal();
+            });
+            $('#deleteSale').click(function(e) {
+                e.preventDefault();
+                deleteSaleDetailTemporary();
+            });
+
+            $('#barcode').focus();
+            showSaleDetailTable();
+            sumSubTotalToTotal();
+        });
+
+        function checkBarcodeInput() {
+            let barcode = $('#barcode').val();
+
+            if (barcode.length === 0) {
+                $.ajax({
+                    url: "{{ route('purchase.showProductsModal') }}",
+                    type: "GET",
+                    dataType: "json",
+                    success: function(response) {
+                        if (response.modal) {
+                            $('#productModal').modal('show');
+                        }
+                    },
+                    error: function(xhr, thrownError) {
+                        alert(`${xhr.status} ${xhr.responseText} ${thrownError}`);
+                    }
+                });
+            } else {
+                $.ajax({
+                    url: "{{ route('purchase.storePurchaseDetailTemporary') }}",
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        invoice_code: $('#invoice_code').val(),
+                        barcode: $('#barcode').val(),
+                        product_name: $('#product_name').val(),
+                        amount: $('#amount').val(),
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            showPurchaseDetailTable();
+                            reset();
+                            // Reload DataTable untuk menangani perubahan nilai "stok" ketika terjadi pengurangan atau pembatalan
+                            reloadDataTable();
+                        }
+
+                        if (response.error) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Peringatan!',
+                                html: response.error,
+                            });
+                            showPurchaseDetailTable();
+                            reset();
+                            // Reload DataTable untuk menangani perubahan nilai "stok" ketika terjadi pengurangan atau pembatalan
+                            reloadDataTable();
+                        }
+                    },
+                    error: function(xhr, thrownError) {
+                        alert(`${xhr.status} ${xhr.responseText} ${thrownError}`);
+                    }
+                });
+            }
+        }
+
+        function sumSubTotalToTotal() {
+            $.ajax({
+                url: "{{ route('sale.sumSubTotalToTotal') }}",
+                type: "POST",
+                dataType: "json",
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    invoice_code: $('#invoice_code').val(),
+                },
+                success: function(response) {
+                    if (response.data) {
+                        $('#total').val(response.data);
+                    }
+                },
+                error: function(xhr, thrownError) {
+                    alert(`${xhr.status} ${xhr.responseText} ${thrownError}`);
+                }
+            });
+        }
+
+        function showSaleDetailTable() {
+            $.ajax({
+                url: "{{ route('sale.showSaleDetailTable') }}",
+                type: "POST",
+                dataType: "json",
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    invoice_code: $('#invoice_code').val(),
+                },
+                beforeSend: function() {
+                    $('#showSaleDetailTable').html('<i class="fa fa-spin fa-spinner"></i>');
+                },
+                success: function(response) {
+                    if (response.data) {
+                        $('#showSaleDetailTable').html(response.data);
+                    }
+                },
+                error: function(xhr, thrownError) {
+                    alert(`${xhr.status} ${xhr.responseText} ${thrownError}`);
+                }
+            });
+        }
+
+        function showSuppliersModal() {
+            // console.log('test!');
+            $.ajax({
+                url: "{{ route('purchase.showSuppliersModal') }}",
+                type: "GET",
+                dataType: "json",
+                success: function(response) {
+                    if (response.modal) {
+                        // console.log("TEST!");
+                        $('#supplierModal').modal('show');
+                    }
+                },
+                error: function(xhr, thrownError) {
+                    alert(`${xhr.status} ${xhr.responseText} ${thrownError}`);
+                }
+            });
+        }
+
+        function showSaleModal() {
+            $.ajax({
+                url: "{{ route('sale.showSaleModal') }}",
+                type: "POST",
+                dataType: "json",
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    invoice_code: $('#invoice_code').val(),
+                    customer: $('#customer_id').val(),
+                },
+                success: function(response) {
+                    if (response.data) {
+                        $('#saleModal').html(response.data).show();
+                        $('#saleModal').on('shown.bs.modal', function(event) {
+                            $('#payment_money').focus();
+                        });
+                        $('#saleModal').modal('show');
+                    }
+                    if (response.error) {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Error',
+                            text: response.error,
+                        })
+                    }
+                },
+                error: function(xhr, thrownError) {
+                    alert(`${xhr.status} ${xhr.responseText} ${thrownError}`);
+                }
+            });
+        }
+
+        function deleteSaleDetailTemporary() {
+            Swal.fire({
+                title: 'Apakah Anda yakin ingin',
+                html: `<h4 style="display: inline;">menghapus <strong style="color: #d33;">transaksi</strong> ?`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya',
+                cancelButtonText: 'Tidak'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "{{ route('sale.deleteSaleDetailTemporary') }}",
+                        type: "POST",
+                        dataType: "json",
+                        data: {
+                            _token: "{{ csrf_token() }}",
+                            invoice_code: $('#invoice_code').val(),
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                window.location.reload();
+                            }
+                        },
+                        error: function(xhr, thrownError) {
+                            alert(`${xhr.status} ${xhr.responseText} ${thrownError}`);
+                        }
+                    });
+                }
+            });
+        }
+
+        function reset() {
+            $('#barcode').val('');
+            $('#product_name').val('');
+            $('#amount').val('1');
+            $('#barcode').focus();
+            sumSubTotalToTotal();
+        }
+    </script>
+@endpush

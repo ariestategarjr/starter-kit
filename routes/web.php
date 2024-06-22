@@ -113,12 +113,12 @@ Route::middleware('auth')->group(function () {
 
     // Sale
     Route::prefix('sale')->group(function () {
-        Route::get('/list', [SaleController::class, 'index'])->name('sales.index');
         // Route::get('/create', [SaleController::class, 'create'])->name('sale.create');
         // Route::post('/store', [SaleController::class, 'store'])->name('sale.store');
         // Route::get('/edit/{id}', [SaleController::class, 'edit'])->name('sale.edit');
         // Route::post('/update/{id}', [SaleController::class, 'update'])->name('sale.update');
         // Route::get('/destroy/{id}', [SaleController::class, 'destroy'])->name('sale.destroy');
+        Route::get('/list', [SaleController::class, 'index'])->name('sales.index');
         Route::get('/showProductsModal', [SaleController::class, 'showProductsModal'])->name('sale.showProductsModal');
         Route::post('/showProductsModalData', [SaleController::class, 'showProductsModalData'])->name('sale.showProductsModalData');
         Route::get('/showCustomersModal', [SaleController::class, 'showCustomersModal'])->name('sale.showCustomersModal');
@@ -140,19 +140,32 @@ Route::middleware('auth')->group(function () {
         // Route::get('/edit/{id}', [SupplierController::class, 'edit'])->name('supplier.edit');
         // Route::post('/update/{id}', [SupplierController::class, 'update'])->name('supplier.update');
         // Route::get('/destroy/{id}', [SupplierController::class, 'destroy'])->name('supplier.destroy');
+
     });
 
     // Purchase
     Route::prefix('purchase')->group(function () {
+        // Route::get('/list', [PurchaseController::class, 'index'])->name('purchases.index');
+        // Route::get('/create', [PurchaseController::class, 'create'])->name('purchase.create');
+        // Route::post('/store', [PurchaseController::class, 'store'])->name('purchase.store');
+        // Route::get('/edit/{id}', [PurchaseController::class, 'edit'])->name('purchase.edit');
+        // Route::post('/update/{id}', [PurchaseController::class, 'update'])->name('purchase.update');
+        // Route::get('/destroy/{id}', [PurchaseController::class, 'destroy'])->name('purchase.destroy');
         Route::get('/list', [PurchaseController::class, 'index'])->name('purchases.index');
-        Route::get('/create', [PurchaseController::class, 'create'])->name('purchase.create');
-        Route::post('/store', [PurchaseController::class, 'store'])->name('purchase.store');
-        Route::get('/edit/{id}', [PurchaseController::class, 'edit'])->name('purchase.edit');
-        Route::post('/update/{id}', [PurchaseController::class, 'update'])->name('purchase.update');
-        Route::get('/destroy/{id}', [PurchaseController::class, 'destroy'])->name('purchase.destroy');
+        Route::get('/showProductsModal', [PurchaseController::class, 'showProductsModal'])->name('purchase.showProductsModal');
+        Route::post('/showProductsModalData', [PurchaseController::class, 'showProductsModalData'])->name('purchase.showProductsModalData');
+        Route::get('/showSuppliersModal', [PurchaseController::class, 'showSuppliersModal'])->name('purchase.showSuppliersModal');
+        Route::post('/showSuppliersModalData', [PurchaseController::class, 'showSuppliersModalData'])->name('purchase.showSuppliersModalData');
+        Route::post('/showSaleDetailTable', [PurchaseController::class, 'showPurchaseDetailTable'])->name('purchase.showPurchaseDetailTable');
+        Route::post('/storeSaleDetailTemporary', [PurchaseController::class, 'storePurchaseDetailTemporary'])->name('purchase.storePurchaseDetailTemporary');
+        Route::post('/deleteSaleDetailTemporaryItem', [PurchaseController::class, 'deletePurchaseDetailTemporaryItem'])->name('purchase.deletePurchaseDetailTemporaryItem');
+        Route::post('/deleteSaleDetailTemporary', [PurchaseController::class, 'deletePurchaseDetailTemporary'])->name('purchase.deletePurchaseDetailTemporary');
+        Route::post('/sumSubTotalToTotal', [PurchaseController::class, 'sumSubTotalToTotal'])->name('purchase.sumSubTotalToTotal');
+        Route::post('/showPurchaseModal', [PurchaseController::class, 'showPurchaseModal'])->name('purchase.showPurchaseModal');
+        Route::post('/storePurchase', [PurchaseController::class, 'storeSale'])->name('purchase.storePurchase');
     });
 
-    // Sale Report
+    // Purchase Report
     Route::prefix('purchase_report')->group(function () {
         Route::get('/list', [PurchaseReportController::class, 'index'])->name('purchases_report.index');
         // Route::get('/create', [SupplierController::class, 'create'])->name('suppliers.create');
