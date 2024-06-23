@@ -56,7 +56,7 @@
                             <div class="form-group">
                                 <label class="form-label fw-bold fs-6 required">Tanggal</label>
                                 <input class="form-control form-control-sm" type="text" autocomplete="off"
-                                    value="{{ date('Y-m-d') }}" readonly>
+                                    value="{{ date('Y-m-d') }}" id="date" readonly>
                             </div>
                         </div>
                         <div class="col-xl-3">
@@ -122,11 +122,13 @@
                         </div>
                     </div>
 
+                    <!--begin::Partial-->
                     <div class="row">
                         <div class="table-responsive text-nowrap" id="showSaleDetailTable">
                             {{-- showSaleDetailTable will be display in here --}}
                         </div>
                     </div>
+                    <!--end::Partial-->
                 </div>
             </div>
             <!--end::Col-->

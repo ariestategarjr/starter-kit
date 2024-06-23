@@ -21,7 +21,7 @@ class PurchaseController extends Controller
 
         // Menjalankan query untuk mendapatkan nomor faktur terakhir pada tanggal tersebut
         $query = DB::select(
-            "SELECT MAX(invoice) AS invoice FROM sales
+            "SELECT MAX(invoice) AS invoice FROM purchases
              WHERE DATE_FORMAT(date, '%Y-%m-%d') = '$date'"
         );
 

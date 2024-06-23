@@ -187,14 +187,127 @@
                     },
                     success: function(response) {
                         if (response.success) {
-                            // console.log(response.success);
+                            // Swal.fire({
+                            //     title: 'Transaksi Berhasil!',
+                            //     text: "Anda berhasil melakukan transaksi.",
+                            //     icon: 'success',
+                            //     confirmButtonColor: '#3085d6',
+                            // })
+                            // window.location.reload();
                             Swal.fire({
-                                title: 'Transaksi Berhasil!',
-                                text: "Anda berhasil melakukan transaksi.",
-                                icon: 'success',
-                                confirmButtonColor: '#3085d6',
-                            })
-                            window.location.reload();
+                                title: "Cetak",
+                                text: "Apakah Anda ingin cetak Struk Penjualan ?",
+                                icon: "warning",
+                                showCancelButton: true,
+                                confirmButtonColor: "#3085d6",
+                                cancelButtonColor: "#d33d33",
+                                confirmButtonText: "Ya",
+                                cancelButtonText: "Tidak"
+                            }).then((result) => {
+                                $invoice_code = $('#invoice_code').val();
+
+                                if (result.isConfirmed) {
+                                    let total_net = $('#total_net').val();
+                                    let print_total = $('#print_total').html(
+                                        total_net);
+                                    // print_total.innerHTML = total_net.value;
+
+                                    let payment_money = $('#payment_money').val();
+                                    let print_payment = $('#print_payment').html(
+                                        payment_money);
+                                    // print_payment.innerHTML = payment_money.value;
+
+                                    let change_money = $('#change_money').val();
+                                    let print_change = $('#print_change').html(
+                                        change_money);
+                                    // print_change.innerHTML = change_money.value;
+
+                                    let date = $('#date').val();
+                                    let print_date = $('#print_date').html(
+                                        `================== 
+                                        ${date} 
+                                        ==================`);
+                                    // print_date.innerHTML = '================== ' +
+                                    //     date.value + ' ==================';
+
+                                    let time = new Date();
+                                    let print_time = $('#print_time').html(
+                                        `==================
+                                        ${time.toLocaleTimeString()} 
+                                         ==================`);
+                                    // print_time.innerHTML = '================== ' +
+                                    //     time.toLocaleTimeString() +
+                                    //     ' ==================';
+
+                                    let element = $('#print_area').html();
+                                    // document.querySelectr(
+                                    //     'print-area').innerHTML;
+
+                                    window.frames["print_frame"].document.title =
+                                        document.title;
+                                    window.frames["print_frame"].document.body
+                                        .innerHTML =
+                                        `
+                                        <style type="text/css">
+                                            .tg-center {
+                                                margin-left: auto;
+                                                margin-right: auto;
+                                            }
+                                            .tg {
+                                                border-collapse: collapse;
+                                                border-spacing: 0;
+                                            }
+
+                                            .tg td {
+                                                border-color: white;
+                                                border-style: solid;
+                                                border-width: 1px;
+                                                font-family: Arial, sans-serif;
+                                                font-size: 14px;
+                                                overflow: hidden;
+                                                padding: 0px 0px;
+                                                word-break: normal;
+                                            }
+
+                                            .tg th {
+                                                border-color: white;
+                                                border-style: solid;
+                                                border-width: 1px;
+                                                font-family: Arial, sans-serif;
+                                                font-size: 20px;
+                                                font-weight: normal;
+                                                overflow: hidden;
+                                                padding: 5px 5px;
+                                                word-break: normal;
+                                            }
+
+                                            .tg .tg-baqh {
+                                                text-align: center;
+                                                vertical-align: top
+                                            }
+
+                                            .tg .tg-wp8o {
+                                                border-color: white;
+                                                text-align: center;
+                                                vertical-align: top;
+                                                padding: 5px 5px;
+                                            }
+
+                                            .tg .tg-0lax {
+                                                text-align: left;
+                                                vertical-align: top;
+                                            }
+                                        </style>
+                                        ${element}
+                                        `;
+                                    window.frames["print_frame"].window.focus();
+                                    window.frames["print_frame"].window.print();
+
+                                    window.location.reload();
+                                } else {
+                                    window.location.reload();
+                                }
+                            });
                         } else {
                             window.location.reload();
                         }

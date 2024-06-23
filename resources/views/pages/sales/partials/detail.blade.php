@@ -30,6 +30,12 @@
     </tbody>
 </table>
 
+<!--begin::Print-->
+<div id="print_area" style="display: none;">
+    @include('pages.sales.partials.print')
+</div>
+<iframe id="print_frame" name="print_frame" src="about:blank" style="display: none;"></iframe>
+<!--end::Print-->
 
 <script>
     function deleteItem(id, name) {

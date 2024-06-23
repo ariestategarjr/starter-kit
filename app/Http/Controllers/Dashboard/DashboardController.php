@@ -13,7 +13,7 @@ class DashboardController extends Controller
         // Count Products, Sales, and Purchases
         $dataCountProducts = DB::table('products')->count();
         $dataCountSales = DB::table('sales')->count();
-        // $dataCountPurchases = DB::table('purchases')->count();
+        $dataCountPurchases = DB::table('purchases')->count();
 
         // Best Seller
         $dataBestSeller = DB::table('sales_detail')
@@ -35,7 +35,7 @@ class DashboardController extends Controller
         $data = [
             'dataCountProducts' => $dataCountProducts,
             'dataCountSales' => $dataCountSales,
-            // 'dataCountPurchases' => $dataCountPurchases,
+            'dataCountPurchases' => $dataCountPurchases,
             'dataBestSeller' => $dataBestSeller,
             'dataEmptyStock' => $dataEmptyStock,
         ];
